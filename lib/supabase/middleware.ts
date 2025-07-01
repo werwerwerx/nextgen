@@ -45,15 +45,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Public routes that don't require authentication
-  const publicRoutes = [
-    '/',
-    '/api',
-    '/auth',
-    '/login'
-  ];
-
-
   // Only protect /protected routes (admin area)
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/protected');
 

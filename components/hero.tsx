@@ -84,8 +84,8 @@ export function Hero() {
 
           {/* Testimonial */}
           <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground">
-            "За 4 месяца стал middle React-разработчиком. ИИ-ментор помог
-            разобраться с самыми сложными концепциями"
+            &ldquo;За 4 месяца стал middle React-разработчиком. ИИ-ментор помог
+            разобраться с самыми сложными концепциями&rdquo;
             <footer className="mt-2 font-semibold text-foreground">
               — Алексей М., Frontend Developer
             </footer>
