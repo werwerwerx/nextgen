@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "@/components/header";
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   title: "Next.js and Supabase Starter Kit",
   description: "The fastest way to build apps with Next.js and Supabase",
 };
-//
-const inter = Inter({ subsets: ["latin"] });
+
+const figtree = Figtree({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${figtree.className} antialiased w-screen min-h-screen bg-background`}>
         <Providers>
           <Header />
           <div className="mt-40">
