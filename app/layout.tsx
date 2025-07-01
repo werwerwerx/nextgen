@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Next.js and Supabase Starter Kit",
   description: "The fastest way to build apps with Next.js and Supabase",
 };
-
+//
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
