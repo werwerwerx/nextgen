@@ -1,21 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
-interface TypographyProps {
-  children: ReactNode;
-  className?: string;
-}
-
-interface GradientSectionHeadingProps {
-  text: string;
-  className?: string;
-}
-
-const withShadowPrimaryStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--primary) / 0.3))"}
-const withShadowForegroundStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--foreground) / 0.3))"}
-
-
-const withGradientCn = "bg-gradient-to-r from-primary via-primary-500 to-purple-500 bg-clip-text text-transparent "
 export const MainHeading = ({
   children,
   className,
@@ -135,3 +120,19 @@ export const SmallText = ({
     {children}
   </small>
 );
+
+interface TypographyProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface GradientSectionHeadingProps {
+  text: string;
+  className?: string;
+}
+
+const withShadowPrimaryStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--primary) / 0.3))"}
+const withShadowForegroundStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--foreground) / 0.3))"}
+
+
+const withGradientCn = "bg-gradient-to-r from-primary via-primary-500 to-purple-500 bg-clip-text text-transparent "

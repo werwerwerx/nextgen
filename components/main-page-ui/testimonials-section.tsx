@@ -5,7 +5,7 @@ import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources"
 
 export const TestimonialsSection = () => (
   <section className={`w-full flex flex-col ${SPACING.gapSemantic}`}>
-    <div className={`flex flex-col ${SPACING.gap}`}>
+    <div className={`flex flex-col ${SPACING.gap} `}>
       <GradientSectionHeading 
         text={CONENT_RESOURCES.testimonials.title}
       />
@@ -14,10 +14,17 @@ export const TestimonialsSection = () => (
       </Subtitle>
     </div>
     
-    <div className={`${LAYOUT.grid} ${SPACING.gap}`}>
-      {CONENT_RESOURCES.testimonials.testimonials.map((testimonial, index) => (
-        <TestimonialCard key={index} testimonial={testimonial} />
-      ))}
+    <div className={`flex flex-col ${SPACING.gap} md:grid md:grid-cols-2 gap-3 md:gap-4`}>
+    {/* Left column - first two stats stacked */}
+    <div className="flex">
+      <TestimonialCard testimonial={CONENT_RESOURCES.testimonials.testimonials[0]} />
+    </div>
+    <div className="flex flex-col gap-3 md:gap-4">
+      <TestimonialCard testimonial={CONENT_RESOURCES.testimonials.testimonials[2]} />
+      <TestimonialCard testimonial={CONENT_RESOURCES.testimonials.testimonials[1]} />
+    </div>
+    
+    {/* Right column - large third stat */}
     </div>
   </section>
 ) 
