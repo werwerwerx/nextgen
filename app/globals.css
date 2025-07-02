@@ -8,7 +8,7 @@ h3,h4 {
   letter-spacing: -0.043em;
 }
 h4,h5,h6,p,a,span {
-  letter-spacing: -0.033em;
+  letter-spacing: -0.013em;
 }
 @layer base {
   :root {

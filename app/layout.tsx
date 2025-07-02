@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${figtree.className} antialiased w-screen min-h-screen bg-background`}>
         <Providers>
           <Header />
-          <div className="mt-40">
+          <div className="mt-20">
           {children}
 
           </div>
