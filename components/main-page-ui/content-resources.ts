@@ -11,20 +11,17 @@ export const CONENT_RESOURCES = {
       {
         value: "> 6000",
         label: "Студентов прошли обучение",
-        comment:
-          "Тысячи уже начали карьеру в IT",
+        comment: "Тысячи уже начали карьеру в IT",
       },
       {
         value: "90 %",
         label: "Нашли работу",
-        comment:
-          "Большинство устраиваются в течение 3–6 месяцев",
+        comment: "Большинство устраиваются в течение 3–6 месяцев",
       },
       {
         value: "> 50 %",
         label: "Предложений с зп от 130 000 ₽",
-        comment:
-          "Больше половины предложений — уже на уровне midlle",
+        comment: "Больше половины предложений — уже на уровне midlle",
       },
     ],
   },
@@ -32,7 +29,7 @@ export const CONENT_RESOURCES = {
   why_it_works: {
     title: "Почему это работает?",
     subtitle:
-      "Мы не обещаем фантазию — показываем реальный путь: курс → ИИ‑решения → стажировка и поддержка.",
+      "Мы не обещаем фантазию — показываем реальный путь",
     features: [
       {
         name: "Практика с первого дня",
@@ -46,45 +43,46 @@ export const CONENT_RESOURCES = {
         source: "Yandex Maps отзывы",
       },
       {
-        name: "Стажировки и реальные проекты",
+        name: "Реальные проекты",
         description:
           "Стажировки среди студентов, участие в production-решениях.",
         source: "Yandex Maps + Отзывы",
       },
     ],
   },
-  testimonials: [
-    {
-      text: "Я прошел курсы по Data Science и ChatGPT Pro … участвовал в 12 стажировках, 7 — тимлид. Я…координатор ИИ‑решений",
-      author: "Евгений Харченко",
-      source: "Yandex Maps",
-      date: "August 4, 2024",
-    },
-    {
-      text: "Действительно толковый курс … практика — просто огонь. Заданий много, они все разнообразные и всесторонняя прокачка.",
-      author: "Павел Горбунов",
-      source: "tutortop.ru",
-      date: "14 October 2023",
-    },
-    {
-      text: "Учусь без опыта — и уже взаимодействую с ИИ‑проектами. Практика с первого дня.",
-      author: "Аркадий",
-      source: "kurshub.by",
-      date: "22 April 2024",
-    },
+  testimonials: {
+    title: "Посмотрите отзывы выпускников",
+    subtitle: "Реальные отзывы о курсе и стажировках",
+    testimonials: [
+
     {
       claim:
         "До курса я и представить не мог, что буду писать нейросети… теперь разрабатываю систему для автоматизации документооборота.",
+      avatar_img: "nikolay.webp",
       author: "Николай Новиков",
       source:
-        "https://yandex.eu/maps/org/universitet_iskusstvennogo_intellekta/175761827387/reviews/?utm_source=chatgpt.com",
+        "https://yandex.ru/maps/org/175761827387/reviews?reviews%5BpublicId%5D=fmcurgqheqd39xdrurf397x1gw&si=6kbq7m0273ygk23wegmh4yxxvw&utm_source=review",
     },
     {
       claim:
         "Практика — просто огонь. Заданий много, они все разнообразные… всесторонняя прокачка будущих специалистов.",
       author: "Павел Горбунов",
+      avatar_img: null,
       source:
-        "https://tutortop.ru/school-reviews/universitet-iskusstvennogo-intellekta/",
+        "https://tutortop.ru/school-reviews/universitet-iskusstvennogo-intellekta/#review33112",
+    },
+    {
+      claim:
+        "В процессе курса есть возможность проходить стажировку в реальных компаниях и создать проект, которым будут пользоваться в дальнейшем.",
+      author: "Алексей",
+      avatar_img: "aleksey.webp",
+      source:
+        "https://www.internet-technologies.ru/schools/neural-university.html/#review-6386",
     },
   ],
+},
+lets_start: {
+  title: "Начнем наше знакомство?",
+  subtitle: "Получите доступ к курсам Neural University",
+},
 };

@@ -1,5 +1,5 @@
 "use client";
-import { RequestForm } from "./lead-request-form.component";
+import { RequestForm } from "./lead-request-form.component.ux";
 import { leadFormShema, TLeadInfo, TPOSTLeadResponse } from "./shared";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";

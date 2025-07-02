@@ -2,6 +2,8 @@ import { HeroSection } from "@/components/main-page-ui/hero-section";
 import { WhyItWorksSection } from "@/components/main-page-ui/why-it-works-section";
 import { StatsSection } from "@/components/main-page-ui/stats-section";
 import { SPACING, LAYOUT } from "@/components/main-page-ui/constants";
+import { TestimonialsSection } from "@/components/main-page-ui/testimonials-section";
+import { LetsStartSection } from "@/components/main-page-ui/lets-start-section";
 
 export default function Home() {
   return (
@@ -14,9 +16,9 @@ export default function Home() {
         </div>
 
         <StatsSection />
+        <TestimonialsSection />
         <WhyItWorksSection />
-        {/* <TestimonialsSection /> */}
-        {/* <LeadRequestFormFeature /> */}
+        <LetsStartSection />
       </div>
     </main>
   );

@@ -6,16 +6,15 @@ import { cn } from "@/lib/utils"
 // Individual components for easier style refactoring
 const StatCard = ({ stat, isLarge = false }: { stat: { value: string; label: string; comment: string }, isLarge?: boolean }) => (
   <div className={cn(
-    "rounded-xl flex flex-col justify-end items-start transition-all duration-300",
-    isLarge 
-      ? "aspect-[1/1] w-full" 
-      : "aspect-[2/1] w-full",
+    "rounded-xl flex flex-col justify-end items-start transition-all duration-300 aspect-[2/1] w-full",
+    isLarge && "md:aspect-[1/1]",
+    !isLarge && "md:aspect-[2/1]",
     CARDS.base,
     CARDS.hover,
     CARDS.content
   )}>
     <div className={`flex flex-col ${SPACING.gap}`}>
-      <div className={`flex flex-col gap-6`}>
+      <div className={`flex flex-col gap-3 md:gap-6`}>
         <StatValue value={stat.value} />
         <StatLabel label={stat.label} />
       </div>

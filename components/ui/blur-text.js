@@ -28,6 +28,7 @@ const BlurText = ({
   easing = (t) => t,
   onAnimationComplete,
   stepDuration = 0.35,
+  spanClassName = '',
 }) => {
   const elements = animateBy === 'words' ? text.split(' ') : text.split('');
   const [inView, setInView] = useState(false);
@@ -46,6 +47,7 @@ const BlurText = ({
     );
     observer.observe(ref.current);
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [threshold, rootMargin]);
 
   const defaultFrom = useMemo(
@@ -80,7 +82,8 @@ const BlurText = ({
   return (
     <p
       ref={ref}
-      className={`blur-text ${className} flex flex-wrap`}
+      className={className}
+      style={{ display: 'flex', flexWrap: 'wrap' }}
     >
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
@@ -94,7 +97,7 @@ const BlurText = ({
 
         return (
           <motion.span
-            className="inline-block will-change-[transform,filter,opacity]"
+            className={`inline-block will-change-[transform,filter,opacity] ${spanClassName}`}
             key={index}
             initial={fromSnapshot}
             animate={inView ? animateKeyframes : fromSnapshot}

@@ -11,6 +11,10 @@ interface GradientSectionHeadingProps {
   className?: string;
 }
 
+const withShadowPrimaryStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--primary) / 0.3))"}
+const withShadowForegroundStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--foreground) / 0.3))"}
+
+
 const withGradientCn = "bg-gradient-to-r from-primary via-primary-500 to-purple-500 bg-clip-text text-transparent "
 export const MainHeading = ({
   children,
@@ -23,7 +27,7 @@ export const MainHeading = ({
       className
     )}
     {...props}
-    style={{ textShadow: "0 0 50px rgba(0, 0, 0, 0.23)" }}
+    style={withShadowForegroundStyle}
   >
     {children}
   </h1>
@@ -40,7 +44,7 @@ export const GradientLargeHeading = ({
       className
     )}
     {...props}
-    style={{ textShadow: "0 0 50px rgba(0, 0, 0, 0.23)" }}
+    style={withShadowPrimaryStyle}
   >
     {children}
   </h1>
@@ -53,11 +57,11 @@ export const SectionHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h2
     className={cn(
-      "text-2xl md:text-4xl lg:text-5xl font-semibold text-foreground drop-shadow-lg",
+      "text-2xl md:text-4xl lg:text-5xl font-semibold text-foreground drop-shadow-lg py-2",
       className
     )}
     {...props}
-    style={{ textShadow: "0 0 50px rgba(0, 0, 0, 0.23)" }}
+    style={withShadowForegroundStyle}
   >
     {children}
   </h2>
@@ -69,14 +73,12 @@ export const GradientSectionHeading = ({
 }: GradientSectionHeadingProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h2
     className={cn(
-      "text-2xl md:text-4xl lg:text-5xl font-semibold leading-tight text-center drop-shadow-lg",
+      "text-2xl md:text-4xl lg:text-5xl font-semibold leading-tight text-center drop-shadow-lg py-2",
       withGradientCn,
       className
     )}
     {...props}
-    style={{ 
-      filter: "drop-shadow(0 4px 12px rgba(139, 69, 19, 0.15)) drop-shadow(0 2px 6px rgba(168, 85, 247, 0.1))"
-    }}
+      style={withShadowPrimaryStyle}
   >
     {text}
   </h2>
@@ -104,7 +106,7 @@ export const Subtitle = ({
   ...props
 }: TypographyProps & React.HTMLAttributes<HTMLParagraphElement>) => (
   <p
-    className={cn("text-sm md:text-md font-semibold text-muted-foreground leading-tight whitespace-pre-line", className)}
+    className={cn("text-sm md:text-xl/6 font-semibold text-muted-foreground leading-tight whitespace-pre-line", className)}
     {...props}
   >
     {children}
@@ -116,7 +118,7 @@ export const BodyText = ({
   className,
   ...props
 }: TypographyProps & React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-base text-foreground", className)} {...props}>
+  <p className={cn("text-base font-semibold text-foreground/70", className)} {...props}>
     {children}
   </p>
 );
@@ -127,7 +129,7 @@ export const SmallText = ({
   ...props
 }: TypographyProps & React.HTMLAttributes<HTMLElement>) => (
   <small
-    className={cn("text-xs text-muted-foreground/70", className)}
+    className={cn("text-xs font-semibold text-muted-foreground/70", className)}
     {...props}
   >
     {children}
