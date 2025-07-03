@@ -1,9 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { BodyText, GradientLargeHeading, MainHeading, SmallText, SubHeading, Subtitle } from "@/components/ui/typography";
+import { BodyText, MainHeading,  Subtitle } from "@/components/ui/typography";
 import { CARDS, SPACING } from "@/components/main-page-ui/constants";
-import { LinkButton } from "@/components/ui/link-button";
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
 
 interface TestimonialCardProps {

@@ -3,9 +3,8 @@ import {
   Subtitle,
   SubHeading,
   BodyText,
-  SmallText,
 } from "@/components/ui/typography";
-import { SPACING, LAYOUT, CARDS } from "@/components/main-page-ui/constants";
+import { SPACING, CARDS } from "@/components/main-page-ui/constants";
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources";
 import { Brain, Users, Briefcase, Book, GraduationCap, MessageCircle, Award, Rocket, Lightbulb, Star } from "lucide-react";
 

@@ -1,6 +1,6 @@
-import { GradientSectionHeading, SectionHeading, Subtitle } from "@/components/ui/typography"
+import { GradientSectionHeading,  Subtitle } from "@/components/ui/typography"
 import { TestimonialCard } from "@/components/ui/testimonial-card"
-import { SPACING, LAYOUT } from "@/components/main-page-ui/constants"
+import { SPACING } from "@/components/main-page-ui/constants"
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources"
 
 export const TestimonialsSection = () => (

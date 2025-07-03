@@ -1,10 +1,9 @@
 "use client";
-import { GradientLargeHeading, Subtitle } from "../ui/typography";
+import {  Subtitle } from "../ui/typography";
 import { SPACING } from "./constants";
 import { CONENT_RESOURCES } from "./content-resources";
 import BlurText from "@/components/ui/blur-text";
 import { LeadRequestFormFeature } from "@/features/lead/lead-request/lead-request-form.feature";
-import { CARDS } from "./constants";
 
 function LetsStartTextContent() {
   return (
