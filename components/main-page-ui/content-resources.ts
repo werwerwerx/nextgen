@@ -28,8 +28,7 @@ export const CONENT_RESOURCES = {
 
   why_it_works: {
     title: "Почему это работает?",
-    subtitle:
-      "Мы не обещаем фантазию — показываем реальный путь",
+    subtitle: "Мы не обещаем фантазию — показываем реальный путь",
     features: [
       {
         name: "Практика с первого дня",
@@ -48,41 +47,58 @@ export const CONENT_RESOURCES = {
           "Стажировки среди студентов, участие в production-решениях.",
         source: "Yandex Maps + Отзывы",
       },
+      {
+        name: "Стажировки в крупных компаниях",
+        description:
+          "Проекты для Ростелекома, КIA, Wildberries и других — даже во время обучения.",
+        source: "Сайт Neural University (статья «Стажировки»)",
+      },
+      {
+        name: "Нейро-куратор 24/7",
+        description:
+          "ChatGPT-помощник отвечает за 8 секунд, проверяет и помогает круглосуточно.",
+        source: "Сайт Neural University (Нейро-проверка заданий)",
+      },
+      {
+        name: "Поддержка при трудоустройстве",
+        description:
+          "Помогают с резюме, тестовыми задачами и до 5–30 вакансий на выбор.",
+        source: "Сайт Neural University (Процесс трудоустройства)",
+      },
     ],
   },
   testimonials: {
     title: "Посмотрите отзывы выпускников",
     subtitle: "Реальные отзывы о курсе и стажировках",
     testimonials: [
-
-    {
-      claim:
-        "До курса я и представить не мог, что когда-нибудь буду писать нейросети. Год назад заполнял наклодные, а теперь разрабатываю систему для автоматизации документооборота. Не в последнюю очередь благодаря стажировке, и это круто - реальные задачи и специфика мотивируют. Помимо технических знаний, я прокачал навыки работы в команде, научился находить ошибки и губко адаптироваться к разным требованиям. Такой опыт точно просто так не получишь.",
-      avatar_img: "nikolay.webp",
-      author: "Николай Новиков",
-      source:
-        "https://yandex.ru/maps/org/175761827387/reviews?reviews%5BpublicId%5D=fmcurgqheqd39xdrurf397x1gw&si=6kbq7m0273ygk23wegmh4yxxvw&utm_source=review",
-    },
-    {
-      claim:
-        "Практика — просто огонь. Заданий много, они все разнообразные… всесторонняя прокачка будущих специалистов.",
-      author: "Павел Горбунов",
-      avatar_img: null,
-      source:
-        "https://tutortop.ru/school-reviews/universitet-iskusstvennogo-intellekta/#review33112",
-    },
-    {
-      claim:
-        "В процессе курса есть возможность проходить стажировку в реальных компаниях и создать проект, которым будут пользоваться в дальнейшем.",
-      author: "Алексей",
-      avatar_img: "aleksey.webp",
-      source:
-        "https://www.internet-technologies.ru/schools/neural-university.html/#review-6386",
-    },
-  ],
-},
-lets_start: {
-  title: "Начнем наше знакомство?",
-  subtitle: "Получите доступ к курсам Neural University",
-},
+      {
+        claim:
+          "До курса я и представить не мог, что когда-нибудь буду писать нейросети. Год назад заполнял наклодные, а теперь разрабатываю систему для автоматизации документооборота. Не в последнюю очередь благодаря стажировке, и это круто - реальные задачи и специфика мотивируют. Помимо технических знаний, я прокачал навыки работы в команде, научился находить ошибки и губко адаптироваться к разным требованиям. Такой опыт точно просто так не получишь.",
+        avatar_img: "nikolay.webp",
+        author: "Николай Новиков",
+        source:
+          "https://yandex.ru/maps/org/175761827387/reviews?reviews%5BpublicId%5D=fmcurgqheqd39xdrurf397x1gw&si=6kbq7m0273ygk23wegmh4yxxvw&utm_source=review",
+      },
+      {
+        claim:
+          "Практика — просто огонь. Заданий много, они все разнообразные… всесторонняя прокачка будущих специалистов.",
+        author: "Павел Горбунов",
+        avatar_img: null,
+        source:
+          "https://tutortop.ru/school-reviews/universitet-iskusstvennogo-intellekta/#review33112",
+      },
+      {
+        claim:
+          "В процессе курса есть возможность проходить стажировку в реальных компаниях и создать проект, которым будут пользоваться в дальнейшем.",
+        author: "Алексей",
+        avatar_img: "aleksey.webp",
+        source:
+          "https://www.internet-technologies.ru/schools/neural-university.html/#review-6386",
+      },
+    ],
+  },
+  lets_start: {
+    title: "Начнем наше знакомство?",
+    subtitle: "Получите доступ к курсам Neural University",
+  },
 };

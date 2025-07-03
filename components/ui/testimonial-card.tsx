@@ -1,9 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { BodyText, GradientLargeHeading, MainHeading, SmallText } from "@/components/ui/typography";
+import { BodyText, GradientLargeHeading, MainHeading, SmallText, SubHeading, Subtitle } from "@/components/ui/typography";
 import { CARDS, SPACING } from "@/components/main-page-ui/constants";
 import { LinkButton } from "@/components/ui/link-button";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
+import Link from "next/link";
 
 interface TestimonialCardProps {
   testimonial: {
@@ -60,29 +61,25 @@ function TestimonialText({ text, claim }: { text?: string; claim?: string }) {
   );
 }
 
-function TestimonialLinkButton({ source }: { source: string }) {
-  return (
-    <LinkButton
-      href={source}
-      className="mt-2 w-full max-w-xs mx-auto flex justify-center"
-      icon={
-        <ArrowRight className="w-4 h-4 text-foreground group-hover:scale-110 transition-all duration-300" />
-      }
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Перейти к отзыву
-    </LinkButton>
-  );
-}
 
 function TestimonialAuthor({ author }: { author: string }) {
   return <MainHeading >{author}</MainHeading>;
 }
 
-export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => (
-  <Card className={CARDS.hover}>
-    <CardContent className={CARDS.content}>
+
+const SeeMore = ({children, href, ...props}: {children: React.ReactNode, href: string} & React.HTMLAttributes<HTMLAnchorElement>) => {
+  return (
+     <Link href={href} target="_blank" rel="noopener noreferrer" {...props} className="text-primary flex flex-row items-center gap-2">
+      {children}
+      <ArrowRight className="w-6 h-6  group-hover:scale-110 transition-all duration-300" />
+    </Link>
+  )
+}
+
+export const TestimonialCard = ({ testimonial, className }: TestimonialCardProps & {className?: string}) => (
+  <Card className={`!bg-background !border-none !shadow-none `}>
+
+    <CardContent className={`${CARDS.content} ${className}`}>
       <div className={`flex flex-col items-center ${SPACING.gap}`}>
         <div className="flex flex-col items-start gap-4 w-full">
           <div className={`${SPACING.gap} flex flex-row items-center`}>
@@ -96,7 +93,11 @@ export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => (
           <TestimonialStars />
         </div>
         <TestimonialText text={testimonial.text} claim={testimonial.claim}  />
-        {/* <TestimonialLinkButton source={testimonial.source} /> */}
+        <SeeMore href={testimonial.source}>
+          <Subtitle className="!text-primary !text-sm">
+          Перейти к отзыву
+          </Subtitle>
+        </SeeMore>
       </div>
     </CardContent>
   </Card>

@@ -5,14 +5,25 @@ import {
   BodyText,
   SmallText,
 } from "@/components/ui/typography";
-import { SPACING, LAYOUT } from "@/components/main-page-ui/constants";
+import { SPACING, LAYOUT, CARDS } from "@/components/main-page-ui/constants";
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources";
-import { Brain, Users, Briefcase } from "lucide-react";
+import { Brain, Users, Briefcase, Book, GraduationCap, MessageCircle, Award, Rocket, Lightbulb, Star } from "lucide-react";
 
-const featureIcons = [Brain, Users, Briefcase];
+const featureIcons = [
+  Brain,
+  Users,
+  Briefcase,
+  Book,
+  GraduationCap,
+  MessageCircle,
+  Award,
+  Rocket,
+  Lightbulb,
+  Star,
+];
 
 export const WhyItWorksSection = () => (
-  <section className={`w-full flex flex-col ${SPACING.gapSemantic} border `}>
+  <section className={`w-full flex flex-col ${SPACING.gapSemantic} `}>
     <div className={`flex flex-col ${SPACING.gap}`}>
       <GradientSectionHeading text={CONENT_RESOURCES.why_it_works.title} />
       <Subtitle className="leading-relaxed">
@@ -20,21 +31,18 @@ export const WhyItWorksSection = () => (
       </Subtitle>
     </div>
     <div
-      className={` ${SPACING.gap} flex flex-col md:flex-row bg-primary rounded-lg p-5 py-5 `}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 rounded-lg p-3 md:p-5"
     >
       {CONENT_RESOURCES.why_it_works.features.map((feature, index) => {
-        const Icon = featureIcons[index] || Brain;
+        const Icon = featureIcons[index % featureIcons.length] || Brain;
         return (
-          <CardContainer key={feature.name} isLast={index === CONENT_RESOURCES.why_it_works.features.length - 1}>
-            <IconItem
-              icon={<Icon className="w-10 h-10" />}
-            />
-
+          <CardContainer key={feature.name}>
+            <IconItem icon={<Icon className="w-8 h-8 md:w-10 md:h-10 text-primary" />} />
             <div className={`flex flex-col ${SPACING.gap}`}>
-              <SubHeading className="text-primary-foreground">
+              <SubHeading className="text-base md:text-lg">
                 {feature.name}
               </SubHeading>
-              <BodyText className="text-primary-foreground/70">
+              <BodyText className="text-sm md:text-base">
                 {feature.description}
               </BodyText>
             </div>
@@ -45,21 +53,19 @@ export const WhyItWorksSection = () => (
   </section>
 );
 
-function CardContainer({ children, isLast }: { children: React.ReactNode, isLast: boolean }) {
+function CardContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex flex-col ${isLast ? "" : "border-r"} items-start border-right text-start text-primary shadow-lg/80 shadow-primary-foreground p-3  ${SPACING.gap} py-10`}>
+    <div
+      className={`flex flex-col items-center text-center shadow-lg rounded-2xl bg-card/80 ${CARDS.base} ${CARDS.hover} p-5 md:p-8 ${SPACING.gap}`}
+    >
       {children}
     </div>
   );
 }
 
-function IconItem({
-  icon,
-}: {
-  icon: React.ReactNode;
-}) {
+function IconItem({ icon }: { icon: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center text-start bg-background text-primary border-primary-foreground shadow-lg/80 shadow-primary-foreground rounded-full p-3">
+    <div className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/20 mb-3">
       {icon}
     </div>
   );

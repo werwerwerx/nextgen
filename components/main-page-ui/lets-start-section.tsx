@@ -4,6 +4,7 @@ import { SPACING } from "./constants";
 import { CONENT_RESOURCES } from "./content-resources";
 import BlurText from "@/components/ui/blur-text";
 import { LeadRequestFormFeature } from "@/features/lead/lead-request/lead-request-form.feature";
+import { CARDS } from "./constants";
 
 function LetsStartTextContent() {
   return (
@@ -13,8 +14,7 @@ function LetsStartTextContent() {
         delay={150}
         animateBy="words"
         direction="top"
-        className="text-2xl md:text-4xl lg:text-5xl font-semibold !text-center py-2"
-        spanClassName="text-primary drop-shadow-[0_19px_10px_hsl(var(--primary)_/_0.3)]"
+        className="text-xl sm:text-3xl md:text-5xl lg:text-7xl font-semibold !text-center py-2"
         animationFrom={{ filter: "blur(10px)", opacity: 0, y: -50 }}
         animationTo={[
           { filter: "blur(5px)", opacity: 0.5, y: 5 },
@@ -22,7 +22,7 @@ function LetsStartTextContent() {
         ]}
         onAnimationComplete={() => {}}
       />
-      <Subtitle className="text-center ">
+      <Subtitle className="text-center text-primary-foreground/70">
         {CONENT_RESOURCES.lets_start.subtitle}
       </Subtitle>
     </div>
@@ -32,10 +32,12 @@ function LetsStartTextContent() {
 export const LetsStartSection = () => {
   return (
     <>
-      <div className={`w-full flex flex-col md:flex-col items-center justify-center ${SPACING.gapSemantic}`}>
+      <div className={`w-full flex py-10 md:py-20 text-primary-foreground rounded-lg flex-col items-center justify-center ${SPACING.gapSemantic} bg-transparent md:px-20 bg-gradient-to-r from-primary to-purple-500`}>
         <LetsStartTextContent />
+        <div className="px-2">
+        <LeadRequestFormFeature/>
 
-          <LeadRequestFormFeature />
+        </div>
       </div>
     </>
   );

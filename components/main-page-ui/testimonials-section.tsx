@@ -17,7 +17,7 @@ export const TestimonialsSection = () => (
     <div className={`flex flex-col ${SPACING.gap} md:grid md:grid-cols-2 gap-3 md:gap-4`}>
     {/* Left column - first two stats stacked */}
     <div className="flex">
-      <TestimonialCard testimonial={CONENT_RESOURCES.testimonials.testimonials[0]} />
+      <TestimonialCard testimonial={CONENT_RESOURCES.testimonials.testimonials[0]} className="items-center justify-center h-full flex" />
     </div>
     <div className="flex flex-col gap-3 md:gap-4">
       <TestimonialCard testimonial={CONENT_RESOURCES.testimonials.testimonials[2]} />

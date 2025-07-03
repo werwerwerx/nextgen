@@ -74,9 +74,9 @@ export const RedirectSpinner = ({ interest }: { interest?: string }) => {
     }, 2000);
   }, [interest]);
   return (
-    <div className="flex items-center absolute top-0 left-0 w-full h-full z-10 bg-background/50 justify-center gap-2 text-lg">
-      <h1>Перенаправляем по партнёрской ссылке...</h1>
-      <Loader2 className="animate-spin w-4 h-4 text-ellipsis" />
+    <div className="fixed inset-0 w-full h-full bg-white/95 backdrop-blur-sm flex items-center justify-center gap-3 text-lg font-medium z-50">
+      <h1 className="text-primary">Перенаправляем по партнёрской ссылке...</h1>
+      <Loader2 className="animate-spin w-6 h-6 text-primary" />
     </div>
   );
 };

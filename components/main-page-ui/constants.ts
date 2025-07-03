@@ -3,11 +3,9 @@ export const SPACING = {
   gapHead: "gap-2 md:gap-6",
   gapCards: "gap-2 md:gap-3 lg:gap-4",
   gapSemantic: "gap-8 md:gap-12 lg:gap-16",
-  gapSection: "gap-14 md:gap-20 lg:gap-28",
-  spaceY: "space-y-8 md:space-y-12 lg:space-y-16",
+  gapSection: "gap-[80px] md:gap-[120px] lg:gap-[200px]",
   padding: "p-6 md:p-8 lg:p-12",
   paddingCard: "p-6 md:p-8",
-  marginContainer: "px-4 py-8 md:py-16"
 } as const
 
 export const ANIMATIONS = {
@@ -17,7 +15,7 @@ export const ANIMATIONS = {
 } as const
 
 export const LAYOUT = {
-  container: "container mx-auto max-w-6xl",
+  container: "container !p-1 sm:!p-2 md:!p-4 lg:!p-6 mx-auto max-w-6xl",
   grid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
   gridTwo: "grid grid-cols-1 md:grid-cols-2",
   flexCenter: "flex items-center justify-center",

@@ -1,4 +1,3 @@
-"use client"
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState, useMemo } from 'react';
 
@@ -28,7 +27,7 @@ const BlurText = ({
   easing = (t) => t,
   onAnimationComplete,
   stepDuration = 0.35,
-  spanClassName = '',
+  gradient = false,
 }) => {
   const elements = animateBy === 'words' ? text.split(' ') : text.split('');
   const [inView, setInView] = useState(false);
@@ -79,11 +78,15 @@ const BlurText = ({
     stepCount === 1 ? 0 : i / (stepCount - 1)
   );
 
+  const gradientClasses = gradient 
+    ? "text-primary"
+    : "";
+
   return (
     <p
       ref={ref}
-      className={className}
-      style={{ display: 'flex', flexWrap: 'wrap' }}
+      className={`blur-text ${className} flex flex-wrap`}
+      style={gradient ? { filter: "drop-shadow(0 19px 10px hsl(var(--primary) / 0.3))" } : {}}
     >
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
@@ -97,7 +100,7 @@ const BlurText = ({
 
         return (
           <motion.span
-            className={`inline-block will-change-[transform,filter,opacity] ${spanClassName}`}
+            className={`inline-block will-change-[transform,filter,opacity] ${gradientClasses}`}
             key={index}
             initial={fromSnapshot}
             animate={inView ? animateKeyframes : fromSnapshot}
