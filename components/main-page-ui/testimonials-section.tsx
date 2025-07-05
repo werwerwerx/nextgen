@@ -4,7 +4,7 @@ import { SPACING } from "@/components/main-page-ui/constants"
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources"
 
 export const TestimonialsSection = () => (
-  <section className={`w-full flex flex-col ${SPACING.gapSemantic}`}>
+  <section className={`w-full flex flex-col ${SPACING.gapSemantic}`} id={CONENT_RESOURCES.testimonials.section_id}>
     <div className={`flex flex-col ${SPACING.gap} `}>
       <GradientSectionHeading 
         text={CONENT_RESOURCES.testimonials.title}

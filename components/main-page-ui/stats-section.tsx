@@ -39,7 +39,7 @@ const StatsGrid = () => (
 )
 
 export const StatsSection = () => (
-  <section className={`w-full flex flex-col ${SPACING.gapSemantic}`}>
+  <section className={`w-full flex flex-col ${SPACING.gapSemantic}`} id={CONENT_RESOURCES.stats_block.section_id}>
     <SectionHeader />
     <StatsGrid />
   </section>

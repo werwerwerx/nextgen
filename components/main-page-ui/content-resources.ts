@@ -1,12 +1,24 @@
-export const CONENT_RESOURCES = {
+export const CONENT_RESOURCES: {
+  [key: string]: {
+    section_id: string;
+    navTitle: string;
+    isNavigated: boolean;
+  } & Record<string, any>
+} = {
   who_we_are: {
     title: "Обучение AI от практиков: задачи, стажировки, поддержка.",
     subtitle: `Создавайте ИИ‑решения с нуля, \n проходите стажировки и получайте поддержку от практиков.`,
+    section_id: "who-we-are",
+    navTitle: "О нас",
+    isNavigated: true,
   },
 
   stats_block: {
     title: "Наши достижения — в цифрах",
     subtitle: "Реальные результаты студентов Neural University",
+    section_id: "stats-block",
+    navTitle: "Наши достижения",
+    isNavigated: false,
     stats: [
       {
         value: "> 6000",
@@ -29,6 +41,9 @@ export const CONENT_RESOURCES = {
   why_it_works: {
     title: "Почему это работает?",
     subtitle: "Мы не обещаем фантазию — показываем реальный путь",
+    section_id: "why-it-works",
+    navTitle: "хз",
+    isNavigated: false,
     features: [
       {
         name: "Практика с первого дня",
@@ -70,6 +85,9 @@ export const CONENT_RESOURCES = {
   testimonials: {
     title: "Посмотрите отзывы выпускников",
     subtitle: "Реальные отзывы о курсе и стажировках",
+    section_id: "testimonials",
+    navTitle: "Отзывы",
+    isNavigated: true,
     testimonials: [
       {
         claim:
@@ -100,5 +118,8 @@ export const CONENT_RESOURCES = {
   lets_start: {
     title: "Начнем наше знакомство?",
     subtitle: "Получите доступ к курсам Neural University",
+    section_id: "lets-start",
+    navTitle: "Начать обучение",
+    isNavigated: true,
   },
 };

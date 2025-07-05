@@ -1,5 +1,5 @@
 "use client";
-import {  Subtitle } from "../ui/typography";
+import { Subtitle } from "../ui/typography";
 import { SPACING } from "./constants";
 import { CONENT_RESOURCES } from "./content-resources";
 import BlurText from "@/components/ui/blur-text";
@@ -30,14 +30,14 @@ function LetsStartTextContent() {
 
 export const LetsStartSection = () => {
   return (
-    <>
-      <div className={`w-full flex py-10 md:py-20 text-primary-foreground rounded-lg flex-col items-center justify-center ${SPACING.gapSemantic} bg-transparent md:px-20 bg-gradient-to-r from-primary to-purple-500`}>
-        <LetsStartTextContent />
-        <div className="px-2">
-        <LeadRequestFormFeature/>
-
-        </div>
+    <section
+      className={`w-full flex py-10 md:py-20 text-primary-foreground rounded-lg flex-col items-center justify-center ${SPACING.gapSemantic} bg-transparent md:px-20 bg-gradient-to-r from-primary to-purple-500`}
+      id={CONENT_RESOURCES.lets_start.section_id}
+    >
+      <LetsStartTextContent />
+      <div className="px-2">
+        <LeadRequestFormFeature />
       </div>
-    </>
+    </section>
   );
 };

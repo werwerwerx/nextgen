@@ -6,7 +6,18 @@ import {
 } from "@/components/ui/typography";
 import { SPACING, CARDS } from "@/components/main-page-ui/constants";
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources";
-import { Brain, Users, Briefcase, Book, GraduationCap, MessageCircle, Award, Rocket, Lightbulb, Star } from "lucide-react";
+import {
+  Brain,
+  Users,
+  Briefcase,
+  Book,
+  GraduationCap,
+  MessageCircle,
+  Award,
+  Rocket,
+  Lightbulb,
+  Star,
+} from "lucide-react";
 
 const featureIcons = [
   Brain,
@@ -22,32 +33,34 @@ const featureIcons = [
 ];
 
 export const WhyItWorksSection = () => (
-  <section className={`w-full flex flex-col ${SPACING.gapSemantic} `}>
+  <section className={`w-full flex flex-col ${SPACING.gapSemantic} `} id={CONENT_RESOURCES.why_it_works.section_id}>
     <div className={`flex flex-col ${SPACING.gap}`}>
       <GradientSectionHeading text={CONENT_RESOURCES.why_it_works.title} />
       <Subtitle className="leading-relaxed">
         {CONENT_RESOURCES.why_it_works.subtitle}
       </Subtitle>
     </div>
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 rounded-lg p-3 md:p-5"
-    >
-      {CONENT_RESOURCES.why_it_works.features.map((feature, index) => {
-        const Icon = featureIcons[index % featureIcons.length] || Brain;
-        return (
-          <CardContainer key={feature.name}>
-            <IconItem icon={<Icon className="w-8 h-8 md:w-10 md:h-10 text-primary" />} />
-            <div className={`flex flex-col ${SPACING.gap}`}>
-              <SubHeading className="text-base md:text-lg">
-                {feature.name}
-              </SubHeading>
-              <BodyText className="text-sm md:text-base">
-                {feature.description}
-              </BodyText>
-            </div>
-          </CardContainer>
-        );
-      })}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 rounded-lg p-3 md:p-5">
+      {CONENT_RESOURCES.why_it_works.features.map(
+        (feature: { name: string; description: string }, index: number) => {
+          const Icon = featureIcons[index % featureIcons.length] || Brain;
+          return (
+            <CardContainer key={feature.name}>
+              <IconItem
+                icon={<Icon className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
+              />
+              <div className={`flex flex-col ${SPACING.gap}`}>
+                <SubHeading className="text-base md:text-lg">
+                  {feature.name}
+                </SubHeading>
+                <BodyText className="text-sm md:text-base">
+                  {feature.description}
+                </BodyText>
+              </div>
+            </CardContainer>
+          );
+        }
+      )}
     </div>
   </section>
 );

@@ -1,0 +1,32 @@
+name: Course Parser Cron
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # Запуск каждые 12 часов
+  workflow_dispatch:  # Позволяет запускать вручную
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: parser/package.json
+      
+      - name: Install dependencies
+        working-directory: parser
+        run: npm ci
+      
+      - name: Run parser
+        working-directory: parser
+        run: npm start 

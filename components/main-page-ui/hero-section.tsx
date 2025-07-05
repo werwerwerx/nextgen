@@ -5,7 +5,7 @@ import { LinkButton } from "@/components/ui/link-button";
 import Image from "next/image";
 
 export const HeroSection = () => (
-  <section className={`w-full h-full flex flex-col md:flex-row items-center justify-start relative text-center md:text-start`}>
+  <section className={`w-full h-full flex flex-col md:flex-row items-center justify-start relative text-center md:text-start`} id={CONENT_RESOURCES.who_we_are.section_id}>
 
     {/* image hero */}
     <Image 

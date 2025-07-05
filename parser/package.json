@@ -1,0 +1,19 @@
+{
+  "name": "@nextgen/parser",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Parser for neural-university courses",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.2"
+  }
+} 
