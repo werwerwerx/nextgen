@@ -13,6 +13,7 @@ export type MainCourse = {
   description: string;
   price: TariffPrice[];
   origin_url: string;
+  installmentPlan: InstallmentPlan;
 }
 
 export type NewCource = {
@@ -30,3 +31,9 @@ export type TariffPrice = {
   name: TariffName;
   price: string;
 }
+
+export type InstallmentPlan = Record<TariffName, Partial<{
+  "12": string;
+  "24": string;
+  "36": string;
+}>>

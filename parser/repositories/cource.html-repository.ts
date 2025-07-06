@@ -1,6 +1,6 @@
-import { ParseError } from './../types/report';
+import { ParseError } from '../shared/report';
 import { CheerioAPI, load } from "cheerio";
-import { CourseLink, TariffName, TariffPrice } from "../types/course";
+import { CourseLink, TariffName, TariffPrice } from "../shared/course";
 import { PRICES_START_FROM_QUERY, queryTarifPrices, NEW_COURSE_DESCRIPTION_QUERY_DEFAULT, NEW_COURSE_DESCRIPTION_FALLBACK_QUERY } from "../config/constants";
 import { DESCRIPTION_QUERY } from "../config/constants";
 

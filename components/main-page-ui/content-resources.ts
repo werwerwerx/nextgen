@@ -1,10 +1,4 @@
-export const CONENT_RESOURCES: {
-  [key: string]: {
-    section_id: string;
-    navTitle: string;
-    isNavigated: boolean;
-  } & Record<string, any>
-} = {
+export const CONENT_RESOURCES = {
   who_we_are: {
     title: "Обучение AI от практиков: задачи, стажировки, поддержка.",
     subtitle: `Создавайте ИИ‑решения с нуля, \n проходите стажировки и получайте поддержку от практиков.`,
@@ -114,6 +108,13 @@ export const CONENT_RESOURCES: {
           "https://www.internet-technologies.ru/schools/neural-university.html/#review-6386",
       },
     ],
+  },
+  courses: {
+    section_id: "courses",
+    navTitle: "Курсы",
+    isNavigated: false,
+    title: "Выберите подходящий курс",
+    subtitle: "Получите доступ к курсам Neural University",
   },
   lets_start: {
     title: "Начнем наше знакомство?",

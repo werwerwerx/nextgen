@@ -62,7 +62,7 @@ function TestimonialText({ text, claim }: { text?: string; claim?: string }) {
 
 
 function TestimonialAuthor({ author }: { author: string }) {
-  return <MainHeading >{author}</MainHeading>;
+  return <MainHeading className="text-start">{author}</MainHeading>;
 }
 
 

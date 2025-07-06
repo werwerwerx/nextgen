@@ -1,18 +1,9 @@
 "use client";
-import { RequestForm } from "./lead-request-form.component.ux";
 import { leadFormShema, TLeadInfo, TPOSTLeadResponse } from "./shared";
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { ApiError, nextJsonApiInstance } from "@/lib/api.instance";
 import { TFlatZodErrors, validate } from "@/lib/utils";
 
-export const LeadRequestFormFeature = () => {
-  return (
-    <RequestForm
-      mayInterestInList={["React", "Next.js", "Tailwind CSS", "TypeScript"]}
-    />
-  );
-};
 
 export const useLeadSubmit = (
   setErrorResponse: (error: string | null) => void,
@@ -44,7 +35,7 @@ export const useLeadSubmit = (
 
       if (response.success) {
         setErrorResponse("Данные успешно отправлены!");
-        setComponent(<RedirectSpinner interest={leadData.interest} />);
+        setComponent(<ModalCongratulations />);
       } else {
         setErrorResponse(response.errorMessage || "Произошла ошибка при отправке данных");
         if (response.errors) {
@@ -66,17 +57,11 @@ export const useLeadSubmit = (
   return [component, submitLead];
 };
 
-export const RedirectSpinner = ({ interest }: { interest?: string }) => {
-  useEffect(() => {
-    setTimeout(() => {
-      const url = interest ? `/api/go?interest=${encodeURIComponent(interest)}` : "/api/go";
-      window.location.href = url;
-    }, 2000);
-  }, [interest]);
+export const ModalCongratulations = () => {
   return (
-    <div className="fixed inset-0 w-full h-full bg-white/95 backdrop-blur-sm flex items-center justify-center gap-3 text-lg font-medium z-50">
-      <h1 className="text-primary">Перенаправляем по партнёрской ссылке...</h1>
-      <Loader2 className="animate-spin w-6 h-6 text-primary" />
+    <div className="fixed inset-0 w-full h-full bg-background/90 backdrop-blur-lg flex items-center justify-center gap-3 text-lg font-medium z-50">
+
+
     </div>
   );
 };

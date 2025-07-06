@@ -15,6 +15,8 @@ export type Database = {
           created_at: string
           description: string
           id: number
+          installment_plan_map: Json | null
+          is_active: boolean
           origin_url: string
           price_starts_from: string | null
           tariff_price: Json | null
@@ -26,6 +28,8 @@ export type Database = {
           created_at?: string
           description?: string
           id?: number
+          installment_plan_map?: Json | null
+          is_active?: boolean
           origin_url: string
           price_starts_from?: string | null
           tariff_price?: Json | null
@@ -37,6 +41,8 @@ export type Database = {
           created_at?: string
           description?: string
           id?: number
+          installment_plan_map?: Json | null
+          is_active?: boolean
           origin_url?: string
           price_starts_from?: string | null
           tariff_price?: Json | null
@@ -148,6 +154,42 @@ export type Database = {
           total_updated?: number | null
         }
         Relationships: []
+      }
+      user_course: {
+        Row: {
+          course_id: number | null
+          created_at: string
+          id: number
+          lead_id: string | null
+        }
+        Insert: {
+          course_id?: number | null
+          created_at?: string
+          id?: number
+          lead_id?: string | null
+        }
+        Update: {
+          course_id?: number | null
+          created_at?: string
+          id?: number
+          lead_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_course_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "cources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_course_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

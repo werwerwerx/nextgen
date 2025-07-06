@@ -1,16 +1,35 @@
 import { HeroSection } from "@/components/main-page-ui/hero-section";
 import { WhyItWorksSection } from "@/components/main-page-ui/why-it-works-section";
 import { StatsSection } from "@/components/main-page-ui/stats-section";
-import { SPACING, LAYOUT } from "@/components/main-page-ui/constants";
 import { TestimonialsSection } from "@/components/main-page-ui/testimonials-section";
 import { LetsStartSection } from "@/components/main-page-ui/lets-start-section";
+import { createClient } from "@supabase/supabase-js";
+import { CoursesSection } from "@/components/main-page-ui/cource-section";
+import { PageContainer } from "@/components/continer";
+import { Footer } from "@/components/ui/footer";
 
-export default function Home() {
+export const revalidate = 3600;
+
+async function getCourses() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  
+  const { data: courses } = await supabase
+    .from("cources")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  return courses || [];
+}
+
+export default async function Home() {
+  const courses = await getCourses();
+
   return (
-    <main className="min-h-screen bg-background">
-      <div
-        className={`${LAYOUT.container} my-16 sm:my-10 md:my-16 lg:my-20 px-4 md:px-2  flex flex-col items-center justify-center text-center ${SPACING.gapSection}`}
-      >
+    <>
+      <PageContainer>
         <div className="h-[66vh] w-full">
           <HeroSection />
         </div>
@@ -18,8 +37,15 @@ export default function Home() {
         <StatsSection />
         <TestimonialsSection />
         <WhyItWorksSection />
-        <LetsStartSection />
-      </div>
-    </main>
+        <CoursesSection courses={courses} />
+        <LetsStartSection
+          mayInterstedIn={courses.map((course) => ({
+            title: course.course_name,
+            origin_url: course.origin_url,
+          }))}
+        />
+      </PageContainer>
+      <Footer courses={courses} />
+    </>
   );
 }

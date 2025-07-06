@@ -1,7 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "../types/supabase";
-import { ParseReport } from "../types/report";
-import { DatabaseError } from "../types/report";
+import { Database } from "../lib/supabase";
+import { ParseReport } from "../shared/report";
+import { DatabaseError } from "../shared/report";
 
 export class ReportRepository {
   private supabase: SupabaseClient<Database>;

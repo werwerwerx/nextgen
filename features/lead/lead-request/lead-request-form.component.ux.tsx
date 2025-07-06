@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useTransition } from "react";
 import { leadFormShema, TLeadInfo } from "./shared";
-import { useLeadSubmit } from "./lead-request-form.feature";
+import { useLeadSubmit } from "./use-lead-submit";
 import { TFlatZodErrors } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

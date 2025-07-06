@@ -1,5 +1,5 @@
 import { CourseLinksHtmlRepository } from "../repositories/course-links.html-repository";
-import type { MainCourse, CourseLink, NewCource } from "../types/course";
+import type { MainCourse, CourseLink, NewCource } from "../shared/course";
 import { HtmlLoaderService } from "./html-loader.service";
 import { CourseHtmlRepository } from "../repositories/cource.html-repository";
 import {
@@ -7,7 +7,8 @@ import {
   DESCRIPTION_QUERY,
   queryTarifPrices,
 } from "../config/constants";
-import { ParseError } from "../types/report";
+import { ParseError } from "../shared/report";
+import { CourceInstallmentPlanHTMLRepository } from "../repositories/cource.installment-plan.html.repository";
 
 export class CourceService {
   private links: CourseLink[] = [];
@@ -18,7 +19,8 @@ export class CourceService {
   constructor(
     private readonly courseLinksHtmlRepository: CourseLinksHtmlRepository,
     private readonly htmlLoaderService: HtmlLoaderService,
-    private readonly courseHtmlRepository: CourseHtmlRepository
+    private readonly courseHtmlRepository: CourseHtmlRepository,
+    private readonly courceInstallmentPlanHTMLRepository: CourceInstallmentPlanHTMLRepository
   ) {}
 
   private async extractCourseFromPage(
@@ -49,7 +51,7 @@ export class CourceService {
       });
     }
       const courseInfoDescription = await this.courseHtmlRepository.getDescription($);
-    
+      const installmentPlan = this.courceInstallmentPlanHTMLRepository.extractInstallmentPlan($);
 
     if (link.as === "MAIN") {
       const [prices, startsFrom] =
@@ -69,6 +71,7 @@ export class CourceService {
         pricesStartFrom: startsFrom || null,
         price: prices,
         origin_url: link.url,
+        installmentPlan: installmentPlan,
       };
     }
     return {

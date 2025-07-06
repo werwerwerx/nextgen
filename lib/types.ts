@@ -1,3 +1,5 @@
+import { Database } from "./supabase/database.types";
+
 export type TRequest<T> = {
   success: true;
   data: T;
@@ -7,3 +9,5 @@ export type TRequest<T> = {
   error: Error;
   data: null;
 }
+
+export type DbCourse = Database['public']['Tables']['cources']['Row'];

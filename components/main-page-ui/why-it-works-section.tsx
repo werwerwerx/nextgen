@@ -3,6 +3,7 @@ import {
   Subtitle,
   SubHeading,
   BodyText,
+  SectionHeading,
 } from "@/components/ui/typography";
 import { SPACING, CARDS } from "@/components/main-page-ui/constants";
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources";
@@ -40,7 +41,7 @@ export const WhyItWorksSection = () => (
         {CONENT_RESOURCES.why_it_works.subtitle}
       </Subtitle>
     </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 rounded-lg p-3 md:p-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-3 rounded-lg p-3 md:p-5">
       {CONENT_RESOURCES.why_it_works.features.map(
         (feature: { name: string; description: string }, index: number) => {
           const Icon = featureIcons[index % featureIcons.length] || Brain;
@@ -50,10 +51,10 @@ export const WhyItWorksSection = () => (
                 icon={<Icon className="w-8 h-8 md:w-10 md:h-10 text-primary" />}
               />
               <div className={`flex flex-col ${SPACING.gap}`}>
-                <SubHeading className="text-base md:text-lg">
+                <SectionHeading className="!shadow-none !text-2xl">
                   {feature.name}
-                </SubHeading>
-                <BodyText className="text-sm md:text-base">
+                </SectionHeading>
+                <BodyText >
                   {feature.description}
                 </BodyText>
               </div>
@@ -68,7 +69,7 @@ export const WhyItWorksSection = () => (
 function CardContainer({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`flex flex-col items-center text-center shadow-lg rounded-2xl bg-card/80 ${CARDS.base} ${CARDS.hover} p-5 md:p-8 ${SPACING.gap}`}
+      className={`flex flex-col items-center text-center shadow-lg rounded-2xl bg-card/80 h-full ${CARDS.base} ${CARDS.hover} p-5 md:p-8 ${SPACING.gap}`}
     >
       {children}
     </div>
@@ -77,7 +78,7 @@ function CardContainer({ children }: { children: React.ReactNode }) {
 
 function IconItem({ icon }: { icon: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/20 mb-3">
+    <div className="flex items-center justify-center p-5 md:w-16 md:h-16 rounded-full bg-primary/20 mb-3">
       {icon}
     </div>
   );

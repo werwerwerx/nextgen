@@ -5,9 +5,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "parser": "ts-node -P parser/tsconfig.json parser/index.ts",
     "supabase:update": "npx supabase gen types typescript --project-id dfmeqrofzpfmickppnmd --schema public > lib/supabase/database.types.ts",
-    "supabase:update-parser": "npx supabase gen types typescript --project-id dfmeqrofzpfmickppnmd --schema public > parser/types/supabase.ts",
+    "supabase:update-parser": "npx supabase gen types typescript --project-id dfmeqrofzpfmickppnmd --schema public > parser/lib/supabase.ts",
     "supabase:update-all": "npm run supabase:update && npm run supabase:update-parser"
   },
   "dependencies": {

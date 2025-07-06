@@ -1,8 +1,8 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "../types/supabase";
+import type { Database } from "../lib/supabase";
 import { config } from "dotenv";
-import { MainCourse, NewCource, TariffPrice } from "../types/course";
-import { DatabaseError } from "../types/report";
+import { MainCourse, NewCource, TariffPrice } from "../shared/course";
+import { DatabaseError } from "../shared/report";
 
 config();
 
@@ -56,6 +56,10 @@ export class CourseDbRepository {
             course.type === "MAIN"
               ? JSON.stringify((course as MainCourse).price)
               : null,
+          installment_plan_map:
+            course.type === "MAIN"
+              ? JSON.stringify((course as MainCourse).installmentPlan)
+              : null,
         })),
         {
           onConflict: "origin_url",
@@ -65,10 +69,22 @@ export class CourseDbRepository {
       .select();
 
     if (error) {
+      console.error("Supabase database error:", {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        coursesCount: uniqueCourses.length,
+        operation: "upsert to cources table"
+      });
+      
       throw new DatabaseError({
-        error: error.message,
+        error: `Supabase Error [${error.code}]: ${error.message}${error.details ? ` | Details: ${error.details}` : ''}${error.hint ? ` | Hint: ${error.hint}` : ''}`,
         clientErrorMessage: "Не удалось сохранить курсы в базу данных",
       });
     }
+
+    console.log(`Successfully saved ${data?.length || 0} courses to database`);
+    return data || [];
   }
 }

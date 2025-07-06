@@ -1,6 +1,6 @@
 import { CONFIG } from "../config/constants";
 import { CheerioAPI, load } from "cheerio";
-import { ParseError } from "../types/report";
+import { ParseError } from "../shared/report";
 
 export class HtmlLoaderService {
   private async fetchWithRetry(url: string, retries: number = 3, delay: number = 1000): Promise<Response> {

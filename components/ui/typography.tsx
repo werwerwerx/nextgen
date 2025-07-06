@@ -8,7 +8,7 @@ export const MainHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     className={cn(
-      "text-2xl md:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm",
+      "text-4xl md:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm",
       className
     )}
     {...props}
@@ -24,7 +24,7 @@ export const GradientLargeHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     className={cn(
-      "text-4xl md:text-5xl lg:text-7xl font-bold text-foreground drop-shadow-sm",
+      "text-5xl md:text-5xl lg:text-7xl font-bold text-foreground drop-shadow-sm",
       withGradientCn,
       className
     )}
@@ -42,7 +42,7 @@ export const SectionHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h2
     className={cn(
-      "text-2xl md:text-4xl lg:text-5xl font-semibold text-foreground drop-shadow-lg py-2",
+      "text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground drop-shadow-lg py-2",
       className
     )}
     {...props}
@@ -58,7 +58,7 @@ export const GradientSectionHeading = ({
 }: GradientSectionHeadingProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h2
     className={cn(
-      "text-2xl md:text-4xl lg:text-5xl font-semibold leading-tight text-center drop-shadow-lg py-2",
+      "text-4xl md:text-4xl lg:text-5xl font-semibold leading-tight text-center drop-shadow-lg py-2",
       withGradientCn,
       className
     )}
@@ -91,7 +91,7 @@ export const Subtitle = ({
   ...props
 }: TypographyProps & React.HTMLAttributes<HTMLParagraphElement>) => (
   <p
-    className={cn("text-sm md:text-xl/6 font-semibold text-muted-foreground leading-tight whitespace-pre-line", className)}
+    className={cn("text-md md:text-xl/6 font-semibold text-muted-foreground leading-tight whitespace-pre-line", className)}
     {...props}
   >
     {children}

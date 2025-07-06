@@ -1,7 +1,7 @@
 import { CheerioAPI, load } from "cheerio";
-import type { CourseLink } from "../types/course";
+import type { CourseLink } from "../shared/course";
 import { CONFIG } from "../config/constants";
-import { ParseError } from "../types/report";
+import { ParseError } from "../shared/report";
 
 export class CourseLinksHtmlRepository {
   private isMainCourseLinkByDomain(link: string): boolean {

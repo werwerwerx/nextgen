@@ -1,9 +1,9 @@
 "use client";
+import { RequestForm } from "@/features/lead/lead-request/lead-request-form.component.ux";
 import { Subtitle } from "../ui/typography";
 import { SPACING } from "./constants";
 import { CONENT_RESOURCES } from "./content-resources";
 import BlurText from "@/components/ui/blur-text";
-import { LeadRequestFormFeature } from "@/features/lead/lead-request/lead-request-form.feature";
 
 function LetsStartTextContent() {
   return (
@@ -28,7 +28,11 @@ function LetsStartTextContent() {
   );
 }
 
-export const LetsStartSection = () => {
+export const LetsStartSection = ({
+  mayInterstedIn,
+}: {
+  mayInterstedIn: { title: string; origin_url: string }[];
+}) => {
   return (
     <section
       className={`w-full flex py-10 md:py-20 text-primary-foreground rounded-lg flex-col items-center justify-center ${SPACING.gapSemantic} bg-transparent md:px-20 bg-gradient-to-r from-primary to-purple-500`}
@@ -36,7 +40,9 @@ export const LetsStartSection = () => {
     >
       <LetsStartTextContent />
       <div className="px-2">
-        <LeadRequestFormFeature />
+        <RequestForm
+          mayInterestInList={mayInterstedIn.map((item) => item.title)}
+        />
       </div>
     </section>
   );

@@ -1,11 +1,9 @@
 export const SPACING = {
   gap: "gap-3 md:gap-4",
-  gapHead: "gap-2 md:gap-6",
-  gapCards: "gap-2 md:gap-3 lg:gap-4",
+  gapHead: "gap-4 md:gap-6",
+  gapCards: "gap-4 md:gap-3 lg:gap-4",
   gapSemantic: "gap-8 md:gap-12 lg:gap-16",
   gapSection: "gap-[80px] md:gap-[120px] lg:gap-[200px]",
-  padding: "p-6 md:p-8 lg:p-12",
-  paddingCard: "p-6 md:p-8",
 } as const
 
 export const ANIMATIONS = {
