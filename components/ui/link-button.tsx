@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+import { ComponentProps } from "react";
 
 interface LinkButtonProps {
-  href?: string;
+  href?: ComponentProps<typeof Link>['href'];
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
@@ -13,7 +14,7 @@ interface LinkButtonProps {
 }
 
 export const LinkButton = ({
-  href = "/courses",
+  href = "/courses" as ComponentProps<typeof Link>['href'],
   children,
   className,
   icon = (

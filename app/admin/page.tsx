@@ -3,7 +3,7 @@ import { PageContainer } from "@/components/continer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SectionHeading, Subtitle } from "@/components/ui/typography";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { Loader2, CheckCircle, UserPlus, Mail } from "lucide-react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
@@ -25,7 +25,7 @@ const validateAdmin = (adminData: TAdminData) => {
   return null;
 };
 
-export default function AdminPage() {
+function AdminPageContent() {
   const [adminData, setAdminData] = useState<TAdminData>({ email: "" });
   const [errors, setErrors] = useState<Partial<Record<keyof TAdminData, string[]>> | null>(null);
   const [isShowErrors, setIsShowErrors] = useState(false);
@@ -273,4 +273,12 @@ export default function AdminPage() {
       </div>
     </PageContainer>
   );
-};
+}
+
+export default function AdminPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AdminPageContent />
+    </Suspense>
+  );
+}

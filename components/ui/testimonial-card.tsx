@@ -4,6 +4,7 @@ import { CARDS, SPACING } from "@/components/main-page-ui/constants";
 import Image from "next/image";
 import { ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
+import { ComponentProps } from "react";
 
 interface TestimonialCardProps {
   testimonial: {
@@ -54,7 +55,7 @@ function TestimonialStars() {
 
 function TestimonialText({ text, claim }: { text?: string; claim?: string }) {
   return (
-    <BodyText className="italic leading-relaxed text-center line-clamp-2 md:line-clamp-none text-start">
+    <BodyText className="italic leading-relaxed  line-clamp-2 md:line-clamp-none text-start">
       &ldquo;{text || claim}&rdquo;
     </BodyText>
   );
@@ -66,7 +67,7 @@ function TestimonialAuthor({ author }: { author: string }) {
 }
 
 
-const SeeMore = ({children, href, ...props}: {children: React.ReactNode, href: string} & React.HTMLAttributes<HTMLAnchorElement>) => {
+const SeeMore = ({children, href, ...props}: {children: React.ReactNode, href: ComponentProps<typeof Link>['href']} & React.HTMLAttributes<HTMLAnchorElement>) => {
   return (
      <Link href={href} target="_blank" rel="noopener noreferrer" {...props} className="text-primary flex flex-row items-center gap-2">
       {children}
@@ -92,7 +93,7 @@ export const TestimonialCard = ({ testimonial, className }: TestimonialCardProps
           <TestimonialStars />
         </div>
         <TestimonialText text={testimonial.text} claim={testimonial.claim}  />
-        <SeeMore href={testimonial.source}>
+        <SeeMore href={testimonial.source as ComponentProps<typeof Link>['href']}>
           <Subtitle className="!text-primary !text-sm">
           Перейти к отзыву
           </Subtitle>
