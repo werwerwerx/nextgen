@@ -1,7 +1,7 @@
 import { SubHeading, BodyText, SmallText } from "@/components/ui/typography";
 import { SPACING } from "@/components/main-page-ui/constants";
 import { LinkButton } from "@/components/ui/link-button";
-import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources";
 import { CourseUnion } from "@/features/cource/course.types";
 
@@ -88,13 +88,6 @@ export const Footer = ({ courses }: { courses: CourseUnion[] }) => {
   );
 };
 
-const ContactItem = ({ icon, text }: { icon: React.ReactNode; text: string }) => (
-  <div className="flex items-center gap-2">
-    <div className="text-primary">{icon}</div>
-    <SmallText className="text-muted-foreground">{text}</SmallText>
-  </div>
-);
-
 const FooterLink = ({ href, text }: { href: string; text: string }) => (
   <a
     href={href}
@@ -104,14 +97,4 @@ const FooterLink = ({ href, text }: { href: string; text: string }) => (
   </a>
 );
 
-const SocialLink = ({ href, text }: { href: string; text: string }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
-  >
-    {text}
-    <ExternalLink className="w-3 h-3" />
-  </a>
-); 
+ 

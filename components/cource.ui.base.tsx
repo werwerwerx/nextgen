@@ -2,14 +2,11 @@
 import { CARDS, SPACING } from "@/components/main-page-ui/constants";
 import {
   BodyText,
-  GradientLargeHeading,
-  GradientSectionHeading,
   MainHeading,
-  Subtitle,
 } from "@/components/ui/typography";
 import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { CourseUnion } from "../features/cource/course.types";
+
 import { cn } from "@/lib/utils";
 
 export const BaseCourceCardContainer = ({

@@ -4,19 +4,27 @@ export async function sendEmailNotification(email: string, subject: string, html
   try {
     const supabase = createAdminClient();
     
-    const { data, error } = await supabase.auth.admin.generateLink({
-      type: 'recovery',
-      email: email
+    const { data, error } = await supabase.functions.invoke('send-email', {
+      body: {
+        to: email,
+        subject: subject,
+        html: htmlContent,
+        from: 'onboarding@resend.dev'
+      }
     });
 
     if (error) {
-      console.error('Ошибка генерации ссылки Supabase:', error);
+      console.error('Ошибка отправки письма через Supabase:', error);
       return false;
     }
 
-    console.log(`Email уведомление отправлено на ${email}`);
+    if (data?.error) {
+      console.error('Ошибка от Edge Function:', data.error);
+      return false;
+    }
+
+    console.log(`Email уведомление отправлено на ${email} (ID: ${data?.id})`);
     console.log(`Тема: ${subject}`);
-    console.log(`Содержимое: ${htmlContent}`);
     
     return true;
   } catch (error) {
@@ -25,7 +33,7 @@ export async function sendEmailNotification(email: string, subject: string, html
   }
 }
 
-export async function sendNewLeadEmailNotification(email: string, leadData: any, courseName?: string) {
+export async function sendNewLeadEmailNotification(email: string, leadData: {name: string; email: string | null; phone: string | null}, courseName?: string) {
   const subject = 'Новая заявка на курс';
   const htmlContent = `
     <h2>🔔 Новая заявка!</h2>

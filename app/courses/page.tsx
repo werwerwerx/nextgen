@@ -6,7 +6,8 @@ import { CourceCard } from "@/components/maincource.card";
 import { SPACING } from "@/components/main-page-ui/constants";
 import { Footer } from "@/components/ui/footer";
 
-export const revalidate = 3600;
+// Перекэшируем каждые 5 минут для быстрого обновления видимости курсов
+export const revalidate = 300;
 
 export default async function CoursesPage() {
   const courses = await getCources();

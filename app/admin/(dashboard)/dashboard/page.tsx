@@ -9,6 +9,10 @@ import { CoursesSection } from "@/components/dashboard/courses-section";
 import { LeadsChart } from "@/components/dashboard/leads-chart";
 import { TelegramSection } from "@/components/dashboard/telegram-section";
 
+// Дашборд должен быть полностью динамическим
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
 type ReportWithErrors = Database["public"]["Tables"]["parse_report"]["Row"] & {
   errors: Database["public"]["Tables"]["parse_error"]["Row"][];
 };
@@ -19,15 +23,15 @@ type LeadWithCourse = Database["public"]["Tables"]["leads"]["Row"] & {
 
 export default async function AdminDashboardPage() {
   const supabase = createAdminClient();
-
-  const { data: reports, error: reportsError } = await supabase
+// todo add error handling
+  const { data: reports } = await supabase
     .from("parse_report")
     .select("*");
-  const { data: report_errors, error: errorsError } = await supabase
+  const { data: report_errors } = await supabase
     .from("parse_error")
     .select("*");
 
-  const { data: leads, error: leadsError } = await supabase
+  const { data: leads } = await supabase
     .from("leads")
     .select("*")
     .order("created_at", { ascending: false });

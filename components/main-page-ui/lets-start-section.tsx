@@ -6,7 +6,7 @@ import { CONENT_RESOURCES } from "./content-resources";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
-export const LetsStartSection = ({}: {}) => {
+export const LetsStartSection = () => {
   const router = useRouter();
   
   return (

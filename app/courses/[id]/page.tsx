@@ -1,6 +1,6 @@
 import { LeadRequestForm } from "@/features/lead/lead-request/lead-request";
 import { PageContainer } from "@/components/continer";
-import { GradientSectionHeading, SectionHeading, Subtitle } from "@/components/ui/typography";
+import { GradientSectionHeading, Subtitle } from "@/components/ui/typography";
 import { getCourseById } from "@/features/cource/cource.api";
 import { notFound } from "next/navigation";
 

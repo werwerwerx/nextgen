@@ -2,7 +2,7 @@
 import { CourceCard } from "@/components/maincource.card";
 import { CourseUnion } from "@/features/cource/course.types";
 import { CONENT_RESOURCES } from "./content-resources";
-import { CARDS, SPACING } from "./constants";
+import { SPACING } from "./constants";
 import {
   GradientLargeHeading,
   GradientSectionHeading,

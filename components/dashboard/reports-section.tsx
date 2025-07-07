@@ -71,7 +71,6 @@ export function ReportsSection({ reports }: ReportsSectionProps) {
 
     if (dateFilter !== 'all') {
       const now = new Date();
-      const reportDate = new Date();
       
       filtered = filtered.filter(report => {
         const createdAt = new Date(report.created_at);
@@ -96,8 +95,8 @@ export function ReportsSection({ reports }: ReportsSectionProps) {
 
   const sortedReports = useMemo(() => {
     return [...filteredReports].sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number | Date;
+      let bValue: string | number | Date;
       
       if (sortField === 'errors_count') {
         aValue = a.errors.length;
@@ -106,8 +105,8 @@ export function ReportsSection({ reports }: ReportsSectionProps) {
         aValue = new Date(a.created_at);
         bValue = new Date(b.created_at);
       } else {
-        aValue = a[sortField];
-        bValue = b[sortField];
+        aValue = a[sortField] || 0;
+        bValue = b[sortField] || 0;
       }
       
       if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;

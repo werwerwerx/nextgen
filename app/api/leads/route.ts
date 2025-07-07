@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { LeadResponse, TLeadData, validateLead } from "./shared";
 import { sendNewLeadEmailNotification } from "@/lib/email";
 
@@ -34,6 +35,7 @@ async function sendTelegramNotification(chatId: string, message: string) {
 }
 
 // Функция для уведомления наблюдателей о новой заявке
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function notifyObservers(leadData: any, courseName?: string) {
   const supabase = await createClient();
   
@@ -57,6 +59,7 @@ async function notifyObservers(leadData: any, courseName?: string) {
 🕐 <b>Время:</b> ${new Date().toLocaleString('ru-RU')}
     `.trim();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const notifications: Promise<any>[] = [];
 
     // Отправляем Telegram уведомления
@@ -88,9 +91,13 @@ export async function POST(
   request: NextRequest
 ): Promise<NextResponse<LeadResponse>> {
   const leadData = (await request.json()) as TLeadData;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
+  
+  console.log('Получены данные лида:', leadData);
+  
   const errors = validateLead(leadData);
   if (errors) {
+    console.log('Ошибки валидации:', errors);
     return NextResponse.json({
       success: false,
       errorMessage: JSON.stringify(errors),
@@ -104,6 +111,7 @@ export async function POST(
   ]);
 
   if (userByPhone || userByEmail) {
+    console.log('Найден дубликат контакта:', { userByPhone, userByEmail });
     return NextResponse.json({
       success: false,
       errorMessage: "Contact already exists",
@@ -121,19 +129,25 @@ export async function POST(
     })
     .select()
     .single();
+    
   if (!leadSaved) {
+    console.error('Ошибка сохранения лида:', error);
     return NextResponse.json({
       success: false,
-      errorMessage: error.message,
+      errorMessage: error?.message || 'Unknown error',
       clientErrorMessage: "Упс! Что-то пошло не так. Попробуйте позже.",
     });
   }
 
+  console.log('Лид успешно сохранен:', leadSaved);
+
   let courseName: string | undefined;
 
   if (leadData.courseInterestedInId) {
+    console.log('Создаем связь с курсом:', leadData.courseInterestedInId);
+    
     // Получаем название курса и создаем связь
-    const [{ data: course }, { data: userCourseSaved, error: userCourseError }] = await Promise.all([
+    const [{ data: course }, { error: userCourseError }] = await Promise.all([
       supabase
         .from('cources')
         .select('course_name')
@@ -149,21 +163,24 @@ export async function POST(
 
     if (course) {
       courseName = course.course_name;
+      console.log('Найден курс:', courseName);
     }
 
     if (userCourseError) {
       console.error('Ошибка при сохранении связи пользователя с курсом:', userCourseError);
-      return NextResponse.json({
-        success: false,
-        errorMessage: userCourseError.message,
-        clientErrorMessage: "Упс! Что-то пошло не так. Попробуйте позже.",
-      });
+      // НЕ возвращаем ошибку, так как лид уже сохранен!
+      // Просто логируем ошибку
+    } else {
+      console.log('Связь с курсом создана успешно');
     }
   }
 
-  // Отправляем уведомления наблюдателям
-  await notifyObservers(leadSaved, courseName);
+  // Отправляем уведомления наблюдателям (в фоновом режиме)
+  notifyObservers(leadSaved, courseName).catch(error => {
+    console.error('Ошибка отправки уведомлений:', error);
+  });
 
+  console.log('Возвращаем успешный ответ');
   return NextResponse.json({
     success: true,
     data: leadSaved,

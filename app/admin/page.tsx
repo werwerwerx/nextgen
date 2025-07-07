@@ -3,8 +3,8 @@ import { PageContainer } from "@/components/continer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SectionHeading, Subtitle } from "@/components/ui/typography";
-import { useState, useEffect } from "react";
-import { Loader2, Send, CheckCircle, LogIn, UserPlus, Mail } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Loader2, CheckCircle, UserPlus, Mail } from "lucide-react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -40,10 +40,33 @@ export default function AdminPage() {
   const searchParams = useSearchParams();
   const supabase = createClient();
 
+  const checkAuthStatus = useCallback(async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user?.user_metadata?.is_admin) {
+        setIsAuthenticated(true);
+        return;
+      }
+
+      const response = await fetch('/api/admin/check');
+      const result = await response.json();
+      
+      if (result.success && result.hasAdmin) {
+        setAuthStatus('login');
+      } else {
+        setAuthStatus('register');
+      }
+    } catch (error) {
+      console.error('Ошибка проверки статуса:', error);
+      setServerError('Ошибка соединения с сервером');
+      setAuthStatus('register');
+    }
+  }, [supabase]);
+
   useEffect(() => {
     checkAuthStatus();
     
-    // Проверяем параметры ошибок из callback
     const error = searchParams.get('error');
     if (error) {
       switch (error) {
@@ -58,40 +81,13 @@ export default function AdminPage() {
           break;
       }
     }
-  }, [searchParams]);
+  }, [searchParams, checkAuthStatus]);
 
-  // Автоматический редирект если уже аутентифицирован
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/admin/dashboard');
     }
   }, [isAuthenticated, router]);
-
-  const checkAuthStatus = async () => {
-    try {
-      // Проверяем текущую сессию
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session?.user?.user_metadata?.is_admin) {
-        setIsAuthenticated(true);
-        return;
-      }
-
-      // Проверяем, есть ли уже зарегистрированный админ
-      const response = await fetch('/api/admin/check');
-      const result = await response.json();
-      
-      if (result.success && result.hasAdmin) {
-        setAuthStatus('login');
-      } else {
-        setAuthStatus('register');
-      }
-    } catch (error) {
-      console.error('Ошибка проверки статуса:', error);
-      setServerError('Ошибка соединения с сервером');
-      setAuthStatus('register');
-    }
-  };
 
   const isCorrectValidated = (data: TAdminData) => {
     const validationErrors = validateAdmin(data);
@@ -150,16 +146,6 @@ export default function AdminPage() {
     setIsSubmitting(false);
   };
 
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      setIsAuthenticated(false);
-      setAuthStatus('login');
-    } catch (error) {
-      console.error('Ошибка выхода:', error);
-      setServerError('Ошибка при выходе из системы');
-    }
-  };
 
   if (authStatus === 'loading') {
     return (

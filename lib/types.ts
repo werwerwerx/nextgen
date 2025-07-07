@@ -1,4 +1,4 @@
-import { Database } from "./supabase/database.types";
+
 
 export type TRequest<T> = {
   success: true;

@@ -1,13 +1,15 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = createAdminClient();
     const { is_active } = await request.json();
+    const { id } = await params;
     
     if (typeof is_active !== 'boolean') {
       return NextResponse.json(
@@ -19,7 +21,7 @@ export async function PATCH(
     const { data: course, error } = await supabase
       .from("cources")
       .update({ is_active })
-      .eq("id", Number(params.id))
+      .eq("id", Number(id))
       .select()
       .single();
 
@@ -30,6 +32,10 @@ export async function PATCH(
         { status: 500 }
       );
     }
+
+    // Инвалидируем кэш страницы курсов
+    revalidatePath('/courses');
+    revalidatePath('/admin/dashboard');
 
     return NextResponse.json({ 
       success: true, 
@@ -47,15 +53,16 @@ export async function PATCH(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = createAdminClient();
+    const { id } = await params;
     
     const { data: course, error } = await supabase
       .from("cources")
       .select("*")
-      .eq("id", Number(params.id))
+      .eq("id", Number(id))
       .single();
 
     if (error) {

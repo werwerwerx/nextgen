@@ -1,7 +1,6 @@
 import {
   GradientSectionHeading,
   Subtitle,
-  SubHeading,
   BodyText,
   SectionHeading,
 } from "@/components/ui/typography";

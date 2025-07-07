@@ -50,7 +50,9 @@ export function LeadSection({ leads }: LeadSectionProps) {
   // Отсортированные данные
   const sortedLeads = useMemo(() => {
     return [...leads].sort((a, b) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let aValue: any = a[sortField];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let bValue: any = b[sortField];
       
       if (sortField === 'course_name') {

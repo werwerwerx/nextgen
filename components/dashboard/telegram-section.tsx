@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -201,9 +201,9 @@ export function TelegramSection() {
     fetchTelegramUpdates();
   }, []);
 
-  const isObserver = (telegramId: string) => {
+  const isObserver = useCallback((telegramId: string) => {
     return observers.some(obs => obs.observer_telegram_id === telegramId);
-  };
+  }, [observers]);
 
   const getUserDisplayName = (message: TelegramMessage) => {
     const firstName = message.first_name || '';
@@ -241,7 +241,7 @@ export function TelegramSection() {
       }));
 
     return [...telegramUsers, ...emailUsers];
-  }, [messages, observers]);
+  }, [messages, observers, isObserver]);
 
   const filteredObservers = useMemo(() => {
     let filtered = allObservers;

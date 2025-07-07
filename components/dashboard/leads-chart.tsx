@@ -53,7 +53,8 @@ function groupLeadsByDate(leads: LeadWithCourse[]): Map<string, ChartDataPoint> 
   }, new Map<string, ChartDataPoint>());
 }
 
-function CustomTooltip({ active, payload, label }: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CustomTooltip({ active, payload, label }: {active?: boolean; payload?: any; label?: string}) {
   if (!active || !payload || !payload.length) {
     return null;
   }
