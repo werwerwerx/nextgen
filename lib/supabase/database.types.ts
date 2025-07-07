@@ -78,6 +78,27 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications_ovserver_contacts: {
+        Row: {
+          created_at: string
+          id: number
+          observer_telegram_id: string | null
+          obvserver_email: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          observer_telegram_id?: string | null
+          obvserver_email?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          observer_telegram_id?: string | null
+          obvserver_email?: string | null
+        }
+        Relationships: []
+      }
       parse_error: {
         Row: {
           client_error_msg: string | null

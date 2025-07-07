@@ -56,37 +56,52 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
-          interest: string | null
           ip: string | null
           name: string
           phone: string | null
-          utm: Json
         }
         Insert: {
           created_at?: string
           email?: string | null
           id?: string
-          interest?: string | null
           ip?: string | null
           name: string
           phone?: string | null
-          utm: Json
         }
         Update: {
           created_at?: string
           email?: string | null
           id?: string
-          interest?: string | null
           ip?: string | null
           name?: string
           phone?: string | null
-          utm?: Json
+        }
+        Relationships: []
+      }
+      notifications_ovserver_contacts: {
+        Row: {
+          created_at: string
+          id: number
+          observer_telegram_id: string | null
+          obvserver_email: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          observer_telegram_id?: string | null
+          obvserver_email?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          observer_telegram_id?: string | null
+          obvserver_email?: string | null
         }
         Relationships: []
       }
       parse_error: {
         Row: {
-          client_error___msg: string | null
+          client_error_msg: string | null
           course_title: string | null
           created_at: string
           error_msg: string
@@ -96,7 +111,7 @@ export type Database = {
           url: string | null
         }
         Insert: {
-          client_error___msg?: string | null
+          client_error_msg?: string | null
           course_title?: string | null
           created_at?: string
           error_msg: string
@@ -106,7 +121,7 @@ export type Database = {
           url?: string | null
         }
         Update: {
-          client_error___msg?: string | null
+          client_error_msg?: string | null
           course_title?: string | null
           created_at?: string
           error_msg?: string
@@ -119,7 +134,7 @@ export type Database = {
           {
             foreignKeyName: "parse_error_report_id_fkey"
             columns: ["report_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "parse_report"
             referencedColumns: ["id"]
           },

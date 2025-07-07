@@ -7,6 +7,7 @@ import { ReportsSection } from "@/components/dashboard/reports-section";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { CoursesSection } from "@/components/dashboard/courses-section";
 import { LeadsChart } from "@/components/dashboard/leads-chart";
+import { TelegramSection } from "@/components/dashboard/telegram-section";
 
 type ReportWithErrors = Database["public"]["Tables"]["parse_report"]["Row"] & {
   errors: Database["public"]["Tables"]["parse_error"]["Row"][];
@@ -79,6 +80,7 @@ export default async function AdminDashboardPage() {
           </p>
         </div>
 
+        <StatsCards leadsCount={leadsWithCourses.length} courses={courses || []} />
 
         <div className="space-y-8">
           <section className="space-y-6">
@@ -87,6 +89,14 @@ export default async function AdminDashboardPage() {
               <div className="flex-1 h-px bg-border" />
             </div>
             <LeadsChart leads={leadsWithCourses} />
+          </section>
+
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <h2 className="text-2xl font-semibold">Telegram Уведомления</h2>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+            <TelegramSection />
           </section>
 
           <section className="space-y-6">
