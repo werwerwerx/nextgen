@@ -8,7 +8,8 @@ import {
 } from "../config/constants";
 import { ParseError, CourseParsingError } from "../shared/report";
 import { CourceInstallmentPlanHTMLRepository } from "../repositories/cource.installment-plan.html.repository";
-import { CheerioAPI } from "cheerio";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "../lib/supabase";
 
 export class CourceService {
   private links: CourseLink[] = [];
@@ -20,13 +21,15 @@ export class CourceService {
     private readonly courseLinksHtmlRepository: CourseLinksHtmlRepository,
     private readonly htmlLoaderService: HtmlLoaderService,
     private readonly courseHtmlRepository: CourseHtmlRepository,
-    private readonly courceInstallmentPlanHTMLRepository: CourceInstallmentPlanHTMLRepository
+    private readonly courceInstallmentPlanHTMLRepository: CourceInstallmentPlanHTMLRepository,
+    private readonly supabase: SupabaseClient<Database>
   ) {}
 
   private async extractCourseFromPage(
     link: CourseLink
-  ): Promise<MainCourse | NewCource> {
+  ): Promise<MainCourse | NewCource | null> {
     try {
+
       const $ = await this.htmlLoaderService.load(link.url);
       const url = new URL(link.url);
       const pathSegments = url.pathname.split("/").filter(Boolean);
@@ -114,9 +117,11 @@ export class CourceService {
       console.log(`Processing course: ${link.title} (${link.url})`);
       try {
         const course = await this.extractCourseFromPage(link);
-        this.courses.push(course);
-        console.log(`Successfully processed course: ${course.title}`);
-        await new Promise((resolve) => setTimeout(resolve, this.delay));
+        if (course) {
+          this.courses.push(course);
+          console.log(`Successfully processed course: ${course.title}`);
+          await new Promise((resolve) => setTimeout(resolve, this.delay));
+        }
       } catch (error) {
         console.error(`Failed to process course: ${link.title}`, error instanceof Error ? error.message : "Unknown error");
         if (error instanceof ParseError) {

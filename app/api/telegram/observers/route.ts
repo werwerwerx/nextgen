@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkAdminAuth } from "@/lib/auth/admin-check";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const authCheck = await checkAdminAuth();
+  if (authCheck) return authCheck;
+
   const supabase = await createClient();
   
   try {
@@ -107,6 +111,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 }
 
 export async function GET(): Promise<NextResponse> {
+  const authCheck = await checkAdminAuth();
+  if (authCheck) return authCheck;
+
   const supabase = await createClient();
   
   try {

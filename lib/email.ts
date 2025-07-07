@@ -40,7 +40,7 @@ export async function sendNewLeadEmailNotification(email: string, leadData: {nam
     <p><strong>Имя:</strong> ${leadData.name}</p>
     <p><strong>Email:</strong> ${leadData.email || 'Не указан'}</p>
     <p><strong>Телефон:</strong> ${leadData.phone || 'Не указан'}</p>
-    <p><strong>Курс:</strong> ${courseName || 'Не определился'}</p>
+    <p><strong>Курс:</strong> ${courseName || 'Нуждается в консультации'}</p>
     <p><strong>Время:</strong> ${new Date().toLocaleString('ru-RU')}</p>
   `;
 

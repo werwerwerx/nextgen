@@ -38,7 +38,8 @@ export async function start(): Promise<ParseReport> {
       courseLinkRepository,
       htmlLoader,
       courseHtmlRepository,
-      courceInstallmentPlanHTMLRepository
+      courceInstallmentPlanHTMLRepository,
+      supabase
     );
     const parseStartTime = Date.now();
     const { courses, errors } = await courceService.visitLinks();

@@ -33,18 +33,33 @@ export async function POST(request: NextRequest): Promise<NextResponse<AdminLogi
     
     // Получаем URL автоматически из Vercel
     const getRedirectUrl = () => {
+      // В продакшене используем NEXT_PUBLIC_SITE_URL
+      if (process.env.NEXT_PUBLIC_SITE_URL) {
+        return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
+      }
+      
+      // Для Vercel Preview environments
       if (process.env.VERCEL_URL) {
         return `https://${process.env.VERCEL_URL}`;
       }
       
-      if (process.env.NEXT_PUBLIC_SITE_URL) {
-        return process.env.NEXT_PUBLIC_SITE_URL;
-      }
-      
-      return 'http://localhost:3000';
+      // Для локальной разработки
+      return process.env.NODE_ENV === 'development' 
+        ? 'http://localhost:3000'
+        : '';
     };
     
     const siteUrl = getRedirectUrl();
+    
+    if (!siteUrl) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: "Ошибка конфигурации: не указан URL сайта" 
+        },
+        { status: 500 }
+      );
+    }
     
     // Используем обычный клиент для отправки Magic Link
     const supabase = await createClient();

@@ -12,7 +12,7 @@ type BaseCourse = {
 export type TariffName = "LIGHT" | "PRO" | "PRO MAX" | "CONSULTING";
 
 export type TariffPrice = {
-  name: TariffName;
+  title: TariffName;
   price: string;
 }
 

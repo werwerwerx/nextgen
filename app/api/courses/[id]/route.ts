@@ -1,11 +1,15 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { checkAdminAuth } from "@/lib/auth/admin-check";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authCheck = await checkAdminAuth();
+  if (authCheck) return authCheck;
+
   try {
     const supabase = createAdminClient();
     const { is_active } = await request.json();
@@ -55,6 +59,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+
   try {
     const supabase = createAdminClient();
     const { id } = await params;
@@ -82,3 +87,4 @@ export async function GET(
     );
   }
 } 
+

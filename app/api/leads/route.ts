@@ -3,186 +3,258 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { LeadResponse, TLeadData, validateLead } from "./shared";
 import { sendNewLeadEmailNotification } from "@/lib/email";
+import { Database } from "@/lib/supabase/database.types";
+
+type SavedLead = Database["public"]["Tables"]["leads"]["Row"];
 
 // Функция для отправки Telegram уведомления
-async function sendTelegramNotification(chatId: string, message: string) {
+async function sendTelegramNotification(chatId: string, message: string): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token) {
-    console.warn('TELEGRAM_BOT_TOKEN не найден в переменных окружения');
-    return;
+    throw new Error('TELEGRAM_BOT_TOKEN не настроен');
   }
 
-  try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: 'HTML',
-      }),
-    });
+  const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML',
+    }),
+  });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Telegram API error:', errorData);
-    }
-  } catch (error) {
-    console.error('Ошибка отправки Telegram сообщения:', error);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Telegram API error: ${JSON.stringify(errorData)}`);
   }
 }
 
 // Функция для уведомления наблюдателей о новой заявке
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function notifyObservers(leadData: any, courseName?: string) {
+async function notifyObservers(leadData: SavedLead, courseName?: string): Promise<void> {
   const supabase = await createClient();
   
-  try {
-    const { data: observers } = await supabase
-      .from('notifications_ovserver_contacts')
-      .select('observer_telegram_id, obvserver_email');
+  const { data: observers, error: observersError } = await supabase
+    .from('notifications_ovserver_contacts')
+    .select('observer_telegram_id, obvserver_email');
 
-    if (!observers || observers.length === 0) {
-      console.log('Не найдено наблюдателей');
-      return;
-    }
+  if (observersError) {
+    throw new Error(`Ошибка при получении списка наблюдателей: ${observersError.message}`);
+  }
 
-    const telegramMessage = `
+  if (!observers || observers.length === 0) {
+    console.log('Не найдено наблюдателей для уведомления');
+    return;
+  }
+
+  const telegramMessage = `
 🔔 <b>Новая заявка!</b>
 
 👤 <b>Имя:</b> ${leadData.name}
 📧 <b>Email:</b> ${leadData.email || 'Не указан'}
 📱 <b>Телефон:</b> ${leadData.phone || 'Не указан'}
-📚 <b>Курс:</b> ${courseName || 'Не определился'}
+📚 <b>Курс:</b> ${courseName || 'Нуждается в консультации'}
 🕐 <b>Время:</b> ${new Date().toLocaleString('ru-RU')}
-    `.trim();
+  `.trim();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const notifications: Promise<any>[] = [];
+  const notifications: Promise<void>[] = [];
 
-    // Отправляем Telegram уведомления
-    const telegramObservers = observers.filter(obs => obs.observer_telegram_id);
-    telegramObservers.forEach(observer => {
+  const telegramObservers = observers.filter(obs => obs.observer_telegram_id);
+  telegramObservers.forEach(observer => {
+    if (observer.observer_telegram_id) {
       notifications.push(
-        sendTelegramNotification(observer.observer_telegram_id!, telegramMessage)
+        sendTelegramNotification(observer.observer_telegram_id, telegramMessage)
+          .catch(error => {
+            console.error(`Ошибка отправки Telegram уведомления для ${observer.observer_telegram_id}:`, error);
+          })
       );
-    });
+    }
+  });
 
-    // Отправляем Email уведомления
-    const emailObservers = observers.filter(obs => obs.obvserver_email);
-    emailObservers.forEach(observer => {
+  const emailObservers = observers.filter(obs => obs.obvserver_email);
+  emailObservers.forEach(observer => {
+    if (observer.obvserver_email) {
       notifications.push(
-        sendNewLeadEmailNotification(observer.obvserver_email!, leadData, courseName)
+        sendNewLeadEmailNotification(observer.obvserver_email, leadData, courseName)
+          .then(() => {})
+          .catch(error => {
+            console.error(`Ошибка отправки Email уведомления для ${observer.obvserver_email}:`, error);
+          })
       );
-    });
+    }
+  });
 
-    // Выполняем все уведомления параллельно
-    await Promise.allSettled(notifications);
-
-    console.log(`Отправлены уведомления ${observers.length} наблюдателям (Telegram: ${telegramObservers.length}, Email: ${emailObservers.length})`);
-  } catch (error) {
-    console.error('Ошибка уведомления наблюдателей:', error);
-  }
+  await Promise.allSettled(notifications);
+  console.log(`Отправлены уведомления ${observers.length} наблюдателям (Telegram: ${telegramObservers.length}, Email: ${emailObservers.length})`);
 }
 
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<LeadResponse>> {
-  const leadData = (await request.json()) as TLeadData;
-  const supabase = createAdminClient();
-  
-  console.log('Получены данные лида:', leadData);
-  
-  const errors = validateLead(leadData);
-  if (errors) {
-    console.log('Ошибки валидации:', errors);
-    return NextResponse.json({
-      success: false,
-      errorMessage: JSON.stringify(errors),
-      clientErrorMessage: "Некорректные данные",
-    });
-  }
-
-  const [{ data: userByPhone }, { data: userByEmail }] = await Promise.all([
-    supabase.from("leads").select("*").eq("phone", leadData.phone).single(),
-    supabase.from("leads").select("*").eq("email", leadData.email).single(),
-  ]);
-
-  if (userByPhone || userByEmail) {
-    console.log('Найден дубликат контакта:', { userByPhone, userByEmail });
-    return NextResponse.json({
-      success: false,
-      errorMessage: "Contact already exists",
-      clientErrorMessage: "Контакт уже существует",
-    });
-  }
-
-  const { data: leadSaved, error } = await supabase
-    .from("leads")
-    .insert({
-      name: leadData.name,
-      phone: leadData.phone,
-      email: leadData.email,
-      ip: request.headers.get("x-forwarded-for") || "unknown",
-    })
-    .select()
-    .single();
+  try {
+    const leadData = (await request.json()) as TLeadData;
+    console.log('Получены данные лида:', leadData);
     
-  if (!leadSaved) {
-    console.error('Ошибка сохранения лида:', error);
-    return NextResponse.json({
-      success: false,
-      errorMessage: error?.message || 'Unknown error',
-      clientErrorMessage: "Упс! Что-то пошло не так. Попробуйте позже.",
-    });
-  }
+    const errors = validateLead(leadData);
+    if (errors) {
+      console.log('Ошибки валидации:', errors);
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "VALIDATION_ERROR",
+          errors,
+          message: "Некорректные данные формы. Пожалуйста, проверьте введенные данные."
+        }),
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
 
-  console.log('Лид успешно сохранен:', leadSaved);
-
-  let courseName: string | undefined;
-
-  if (leadData.courseInterestedInId) {
-    console.log('Создаем связь с курсом:', leadData.courseInterestedInId);
-    
-    // Получаем название курса и создаем связь
-    const [{ data: course }, { error: userCourseError }] = await Promise.all([
-      supabase
-        .from('cources')
-        .select('course_name')
-        .eq('id', leadData.courseInterestedInId)
-        .single(),
-      supabase
-        .from("user_course")
-        .insert({
-          course_id: leadData.courseInterestedInId,
-          lead_id: leadSaved.id,
-        })
+    const supabase = createAdminClient();
+    const [phoneResult, emailResult] = await Promise.all([
+      supabase.from("leads").select("*").eq("phone", leadData.phone).single(),
+      supabase.from("leads").select("*").eq("email", leadData.email).single(),
     ]);
 
-    if (course) {
-      courseName = course.course_name;
-      console.log('Найден курс:', courseName);
+    if (phoneResult.error && phoneResult.error.code !== 'PGRST116') {
+      console.error('Ошибка проверки телефона:', phoneResult.error);
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "DATABASE_ERROR",
+          message: "Ошибка при проверке данных. Пожалуйста, попробуйте позже."
+        }),
+        { 
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
 
-    if (userCourseError) {
-      console.error('Ошибка при сохранении связи пользователя с курсом:', userCourseError);
-      // НЕ возвращаем ошибку, так как лид уже сохранен!
-      // Просто логируем ошибку
-    } else {
-      console.log('Связь с курсом создана успешно');
+    if (emailResult.error && emailResult.error.code !== 'PGRST116') {
+      console.error('Ошибка проверки email:', emailResult.error);
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "DATABASE_ERROR",
+          message: "Ошибка при проверке данных. Пожалуйста, попробуйте позже."
+        }),
+        { 
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
+
+    if (phoneResult.data || emailResult.data) {
+      console.log('Найден дубликат контакта:', { 
+        byPhone: phoneResult.data, 
+        byEmail: emailResult.data 
+      });
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "DUPLICATE_CONTACT",
+          message: "Такой контакт уже существует в нашей базе."
+        }),
+        { 
+          status: 409,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    const { data: leadSaved, error: saveError } = await supabase
+      .from("leads")
+      .insert({
+        name: leadData.name,
+        phone: leadData.phone,
+        email: leadData.email,
+        ip: request.headers.get("x-forwarded-for") || "unknown",
+      })
+      .select()
+      .single();
+    
+    if (saveError || !leadSaved) {
+      console.error('Ошибка сохранения лида:', saveError);
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "DATABASE_ERROR",
+          message: "Не удалось сохранить ваши данные. Пожалуйста, попробуйте позже."
+        }),
+        { 
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    console.log('Лид успешно сохранен:', leadSaved);
+
+    let courseName: string | undefined;
+    if (leadData.courseInterestedInId) {
+      console.log('Создаем связь с курсом:', leadData.courseInterestedInId);
+      
+      const [{ data: course, error: courseError }, { error: userCourseError }] = await Promise.all([
+        supabase
+          .from('cources')
+          .select('course_name')
+          .eq('id', leadData.courseInterestedInId)
+          .single(),
+        supabase
+          .from("user_course")
+          .insert({
+            course_id: leadData.courseInterestedInId,
+            lead_id: leadSaved.id,
+          })
+      ]);
+
+      if (courseError) {
+        console.error('Ошибка при получении информации о курсе:', courseError);
+      } else if (course) {
+        courseName = course.course_name;
+        console.log('Найден курс:', courseName);
+      }
+
+      if (userCourseError) {
+        console.error('Ошибка при сохранении связи пользователя с курсом:', userCourseError);
+      } else {
+        console.log('Связь с курсом создана успешно');
+      }
+    }
+
+    notifyObservers(leadSaved, courseName).catch(error => {
+      console.error('Ошибка отправки уведомлений:', error);
+    });
+
+    return new NextResponse(
+      JSON.stringify({
+        success: true,
+        data: leadSaved,
+        message: "Заявка успешно создана"
+      }),
+      { 
+        status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  } catch (error) {
+    console.error('Критическая ошибка при обработке заявки:', error);
+    return new NextResponse(
+      JSON.stringify({
+        success: false,
+        error: "INTERNAL_ERROR",
+        message: "Произошла непредвиденная ошибка. Пожалуйста, попробуйте позже."
+      }),
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
-
-  // Отправляем уведомления наблюдателям (в фоновом режиме)
-  notifyObservers(leadSaved, courseName).catch(error => {
-    console.error('Ошибка отправки уведомлений:', error);
-  });
-
-  console.log('Возвращаем успешный ответ');
-  return NextResponse.json({
-    success: true,
-    data: leadSaved,
-  });
 }

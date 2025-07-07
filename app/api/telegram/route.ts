@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkAdminAuth } from "@/lib/auth/admin-check";
 
 interface TelegramUpdate {
   update_id: number;
@@ -26,6 +27,9 @@ interface TelegramResponse {
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  const authCheck = await checkAdminAuth();
+  if (authCheck) return authCheck;
+
   const token = process.env.TELEGRAM_BOT_TOKEN;
   
   if (!token) {
@@ -99,6 +103,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
 // POST method to mark updates as processed (acknowledge offset)
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const authCheck = await checkAdminAuth();
+  if (authCheck) return authCheck;
+
   const token = process.env.TELEGRAM_BOT_TOKEN;
   
   if (!token) {

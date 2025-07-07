@@ -3,6 +3,7 @@ import { Figtree } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "@/components/header";
+import { Toaster } from "@/components/ui/toaster"
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -28,9 +29,9 @@ export default function RootLayout({
           <Header />
           <div className="mt-20">
           {children}
-
           </div>
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

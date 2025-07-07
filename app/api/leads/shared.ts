@@ -1,4 +1,5 @@
 import z from "zod";
+import { Database } from "@/lib/supabase/database.types";
 
 export type TLeadData = {
   name: string;
@@ -6,6 +7,8 @@ export type TLeadData = {
   email: string;
   courseInterestedInId: number | null;
 };
+
+type SavedLead = Database["public"]["Tables"]["leads"]["Row"];
 
 const leadSchema = z.object({
   email: z.string().email("Некорректный email"),
@@ -21,6 +24,7 @@ export const validateLead = (leadData: TLeadData) => {
   }
   return null;
 };
+
 export const submitLeadData = async (
   leadData: TLeadData
 ): Promise<LeadResponse> => {
@@ -40,7 +44,6 @@ export type LeadResponse = {
   clientErrorMessage: string;
 } | {
   success: true;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
+  data: SavedLead;
 };
 

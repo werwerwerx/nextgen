@@ -12,13 +12,22 @@ export class ReportRepository {
 
   async saveReport(report: ParseReport) {
     try {
+      console.log('Saving parse report with errors:', {
+        totalErrors: report.errors.parsing.length,
+        errors: report.errors.parsing.map(e => ({
+          url: e.url,
+          error: e.error,
+          title: e.title
+        }))
+      });
+
       const { data, error } = await this.supabase.from('parse_report').insert([{
         avg_parse_time: Math.round(report.performance.averageParseTime),
         total_parse_time: Math.round(report.performance.totalParseTime),
         total_courses_parsed: report.stats.totalLinksParsed,
         duration: Math.round(report.duration).toString(),
         total_updated: report.stats.updatedInDb,
-      }]).select().single()
+      }]).select().single();
 
       if (error) {
         throw new DatabaseError({
@@ -35,23 +44,69 @@ export class ReportRepository {
       }
 
       if (report.errors.parsing.length > 0) {
-        const { error: error2 } = await this.supabase.from('parse_error').insert(
-          report.errors.parsing.map(error => ({
+        // Получаем все URLs из текущих ошибок
+        const errorUrls = report.errors.parsing.map(error => error.url).filter(Boolean);
+
+        console.log('Looking for existing errors with URLs:', errorUrls);
+
+        // Для каждого URL получаем самую последнюю ошибку
+        const latestErrorsPromises = errorUrls.map(url => 
+          this.supabase
+            .from('parse_error')
+            .select('*')
+            .eq('url', url)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single()
+        );
+
+        const latestErrorsResults = await Promise.all(latestErrorsPromises);
+        
+        // Фильтруем успешные результаты и создаем мапу
+        const handledStatusMap = new Map(
+          latestErrorsResults
+            .filter(result => result.data !== null)
+            .map(result => {
+              const data = result.data!; // Safe to use ! because of filter above
+              return [data.url, { is_handled: data.is_handled, error_msg: data.error_msg }];
+            })
+        );
+
+        console.log('Found latest errors:', 
+          Object.fromEntries(handledStatusMap.entries())
+        );
+
+        const newErrors = report.errors.parsing.map(error => {
+          const existingData = handledStatusMap.get(error.url);
+          console.log(`Latest status for ${error.url}:`, existingData);
+          
+          return {
             error_msg: error.error,
             client_error_msg: error.clientErrorMessage,
             course_title: error.title,
             url: error.url,
             type: 'parsing',
             report_id: data.id,
-          }))
-        ).select()
+            is_handled: existingData?.error_msg === error.error ? existingData.is_handled : false
+          };
+        });
 
-        if (error2) {
+        console.log('Inserting new errors:', newErrors);
+
+        const { error: insertError, data: insertedErrors } = await this.supabase
+          .from('parse_error')
+          .insert(newErrors)
+          .select();
+
+        if (insertError) {
+          console.error('Error inserting new errors:', insertError);
           throw new DatabaseError({
-            error: error2.message,
+            error: insertError.message,
             clientErrorMessage: "Не удалось сохранить ошибки парсинга"
           });
         }
+
+        console.log('Successfully inserted errors:', insertedErrors);
       }
 
       return data;

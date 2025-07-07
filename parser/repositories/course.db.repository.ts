@@ -40,6 +40,14 @@ export class CourseDbRepository {
       return [];
     }
 
+    console.log('Preparing courses for DB:', uniqueCourses.map(course => 
+      course.type === "MAIN" ? {
+        title: course.title,
+        price: course.price,
+        priceJson: JSON.stringify(course.price)
+      } : null
+    ));
+
     const { data, error } = await this.supabase
       .from("cources")
       .upsert(
@@ -54,11 +62,11 @@ export class CourseDbRepository {
               : null,
           tariff_price:
             course.type === "MAIN"
-              ? JSON.stringify((course as MainCourse).price)
+              ? course.price
               : null,
           installment_plan_map:
             course.type === "MAIN"
-              ? JSON.stringify((course as MainCourse).installmentPlan)
+              ? (course as MainCourse).installmentPlan
               : null,
         })),
         {

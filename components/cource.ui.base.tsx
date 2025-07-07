@@ -98,6 +98,22 @@ export const CourseCardPrice = ({ value }: { value: string }) => (
   </MainHeading>
 );
 
+export const CourseTariffPrices = ({ prices }: { prices: Record<string, string> }) => {
+  const nonEmptyPrices = Object.entries(prices).filter(([, price]) => price && price !== "");
+  if (nonEmptyPrices.length === 0) return null;
+  
+  return (
+    <div className="text-md text-muted-foreground group-hover:text-primary-foreground/70 transition-all duration-300 flex flex-col items-start">
+      <span>Тарифы:</span>
+      {nonEmptyPrices.map(([name, price]) => (
+        <span key={name}>
+          {name}: {price}
+        </span>
+      ))}
+    </div>
+  );
+};
+
 export const CourceCardDecription = ({ description }: { description: string }) => (
   <BodyText className="text-start group-hover:!text-primary-foreground/80 transition-all duration-300 line-clamp-3">
     {description}

@@ -14,15 +14,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ChevronUp, ChevronDown, Search, Filter, Calendar, AlertCircle } from "lucide-react";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ChevronUp, ChevronDown, Search, Filter, Calendar, AlertCircle, ExternalLink } from "lucide-react";
+import { CreateCourseForm } from "./create-course-form";
+
+type ParseError = Database["public"]["Tables"]["parse_error"]["Row"];
 
 type ReportWithErrors = Database["public"]["Tables"]["parse_report"]["Row"] & {
-  errors: Database["public"]["Tables"]["parse_error"]["Row"][];
+  errors: ParseError[];
 };
 
 interface ReportsSectionProps {
@@ -119,6 +122,13 @@ export function ReportsSection({ reports }: ReportsSectionProps) {
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedReports = sortedReports.slice(startIndex, startIndex + pageSize);
 
+  const reportsWithoutErrors = paginatedReports.filter(report => 
+    report.errors.length === 0
+  );
+  const reportsWithErrors = paginatedReports.filter(report => 
+    report.errors.length > 0
+  );
+
   const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
     <TableHead>
       <Button
@@ -167,35 +177,6 @@ export function ReportsSection({ reports }: ReportsSectionProps) {
     } else {
       return `${displaySeconds}с`;
     }
-  };
-
-  const ErrorCell = ({ errors }: { errors: Database["public"]["Tables"]["parse_error"]["Row"][] }) => {
-    if (errors.length === 0) {
-      return <span className="text-green-600">0</span>;
-    }
-
-    const errorMessages = errors.map(error => error.client_error_msg || 'Неизвестная ошибка').join('\n');
-
-    return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="flex items-center gap-2 text-red-600 cursor-help">
-              <AlertCircle className="h-4 w-4" />
-              {errors.length}
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="max-w-[400px]">
-            <div className="space-y-1">
-              <p className="font-medium">Ошибки парсинга:</p>
-              <div className="text-sm whitespace-pre-line">
-                {errorMessages}
-              </div>
-            </div>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
   };
 
   return (
@@ -253,34 +234,137 @@ export function ReportsSection({ reports }: ReportsSectionProps) {
 
       {paginatedReports.length > 0 ? (
         <div className="space-y-4">
-          <div className="rounded-lg border overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <SortableHeader field="id">ID</SortableHeader>
-                  <SortableHeader field="created_at">Дата создания</SortableHeader>
-                  <SortableHeader field="total_courses_parsed">Курсов</SortableHeader>
-                  <SortableHeader field="total_updated">Обновлено</SortableHeader>
-                  <TableHead>Продолжительность</TableHead>
-                  <SortableHeader field="errors_count">Ошибки</SortableHeader>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedReports.map((report) => (
-                  <TableRow key={report.id}>
-                    <TableCell className="font-medium">{report.id}</TableCell>
-                    <TableCell>{formatDate(report.created_at)}</TableCell>
-                    <TableCell>{report.total_courses_parsed || 0}</TableCell>
-                    <TableCell>{report.total_updated || 0}</TableCell>
-                    <TableCell>{formatDuration(report.duration)}</TableCell>
-                    <TableCell>
-                      <ErrorCell errors={report.errors} />
-                    </TableCell>
+          {reportsWithoutErrors.length > 0 && (
+            <div className="rounded-lg border overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <SortableHeader field="id">ID</SortableHeader>
+                    <SortableHeader field="created_at">Дата создания</SortableHeader>
+                    <SortableHeader field="total_courses_parsed">Курсов</SortableHeader>
+                    <SortableHeader field="total_updated">Обновлено</SortableHeader>
+                    <TableHead>Продолжительность</TableHead>
+                    <TableHead>Ошибки</TableHead>
                   </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {reportsWithoutErrors.map((report) => (
+                    <TableRow key={report.id}>
+                      <TableCell className="font-medium">{report.id}</TableCell>
+                      <TableCell>{formatDate(report.created_at)}</TableCell>
+                      <TableCell>{report.total_courses_parsed || 0}</TableCell>
+                      <TableCell>{report.total_updated || 0}</TableCell>
+                      <TableCell>{formatDuration(report.duration)}</TableCell>
+                      <TableCell>
+                        <span className="text-green-600">0</span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+
+          {reportsWithErrors.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-md font-semibold text-destructive">
+                Отчеты с ошибками ({reportsWithErrors.length})
+              </h4>
+              <Accordion type="multiple" className="space-y-2">
+                {reportsWithErrors.map((report) => (
+                  <AccordionItem key={report.id} value={report.id.toString()} className="border rounded-lg">
+                    <AccordionTrigger className="px-4 py-3 hover:no-underline">
+                      <div className="flex items-center justify-between w-full mr-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <AlertCircle className="h-4 w-4 text-destructive" />
+                            <span className="font-medium">Отчет #{report.id}</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">
+                            {formatDate(report.created_at)}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm">
+                          <span>Курсов: {report.total_courses_parsed || 0}</span>
+                          <span>Обновлено: {report.total_updated || 0}</span>
+                          <span>Ошибок: {report.errors.length}</span>
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-4">
+                      <div className="space-y-4">
+                        <div className="text-sm text-muted-foreground">
+                          Продолжительность: {formatDuration(report.duration)}
+                        </div>
+                        
+                        <div className="space-y-3">
+                          <h5 className="font-medium">Ошибки парсинга:</h5>
+                          {report.errors.map((error, index) => (
+                            <div key={error.id} className="border rounded-lg p-4 space-y-3">
+                              <div className="flex items-start justify-between">
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-destructive">
+                                      Ошибка #{index + 1}
+                                    </span>
+                                    <span className="text-xs bg-muted px-2 py-1 rounded">
+                                      {error.type}
+                                    </span>
+                                    {error.is_handled && (
+                                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                        Уже обработана
+                                      </span>
+                                    )}
+                                  </div>
+                                  {error.course_title && (
+                                    <p className="text-sm">
+                                      <strong>Курс:</strong> {error.course_title}
+                                    </p>
+                                  )}
+                                  {error.url && (
+                                    <div className="flex items-center gap-2">
+                                      <strong className="text-sm">URL:</strong>
+                                      <a 
+                                        href={error.url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                                      >
+                                        {error.url}
+                                        <ExternalLink className="h-3 w-3" />
+                                      </a>
+                                    </div>
+                                  )}
+                                  <p className="text-sm text-destructive">
+                                    <strong>Ошибка:</strong> {error.client_error_msg || error.error_msg}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              {error.url && (
+                                <div className="border-t pt-3">
+                                  {error.is_handled && (
+                                    <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-800">
+                                      ⚠️ Эта ошибка уже была обработана, но вы можете создать курс заново если необходимо
+                                    </div>
+                                  )}
+                                  <CreateCourseForm 
+                                    url={error.url}
+                                    suggestedTitle={error.course_title || undefined}
+                                    errorId={error.id}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </TableBody>
-            </Table>
-          </div>
+              </Accordion>
+            </div>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">

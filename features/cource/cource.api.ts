@@ -43,7 +43,17 @@ export const getCources = async (): Promise<CourseUnion[] > => {
   
     return courses.map((course): CourseUnion => {
       if (course.type === "MAIN") {
-        const prices = tariffPriceSchema.safeParse(course.tariff_price);
+        let parsedTariffPrice;
+        try {
+          parsedTariffPrice = typeof course.tariff_price === 'string' 
+            ? JSON.parse(course.tariff_price) 
+            : course.tariff_price;
+        } catch (e) {
+          console.error('Failed to parse tariff price:', e);
+          parsedTariffPrice = [];
+        }
+
+        const prices = tariffPriceSchema.safeParse(parsedTariffPrice);
         
         let parsedInstallmentPlan = null;
         if (course.installment_plan_map) {
@@ -127,7 +137,17 @@ export const getCourseById = async (id: number): Promise<CourseUnion | null> => 
   if (!course) return null;
 
   if (course.type === "MAIN") {
-    const prices = tariffPriceSchema.safeParse(course.tariff_price);
+    let parsedTariffPrice;
+    try {
+      parsedTariffPrice = typeof course.tariff_price === 'string' 
+        ? JSON.parse(course.tariff_price) 
+        : course.tariff_price;
+    } catch (e) {
+      console.error('Failed to parse tariff price:', e);
+      parsedTariffPrice = [];
+    }
+
+    const prices = tariffPriceSchema.safeParse(parsedTariffPrice);
     
     let parsedInstallmentPlan = null;
     if (course.installment_plan_map) {

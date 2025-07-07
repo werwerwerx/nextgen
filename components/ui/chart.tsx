@@ -125,15 +125,18 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed"
     nameKey?: string
     labelKey?: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    payload?: any[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    label?: any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    labelFormatter?: any
+    payload?: Array<{
+      name?: string;
+      value?: number | string;
+      dataKey?: string;
+      color?: string;
+      payload?: Record<string, unknown>;
+      fill?: string;
+    }>
+    label?: string | number | React.ReactNode
+    labelFormatter?: (value: string | number | React.ReactNode, payload?: unknown[]) => React.ReactNode
     labelClassName?: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    formatter?: any
+    formatter?: (value: number | string, name: string, item: unknown, index: number, payload: unknown) => React.ReactNode
     color?: string
   }) {
   const { config } = useChart()
@@ -192,7 +195,7 @@ function ChartTooltipContent({
         {payload.map((item, index) => {
           const key = `${nameKey || item.name || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
-          const indicatorColor = color || item.payload.fill || item.color
+          const indicatorColor = color || item.payload?.fill || item.color
 
           return (
             <div
@@ -269,8 +272,11 @@ function ChartLegendContent({
 }: React.ComponentProps<"div"> & {
     hideIcon?: boolean
     nameKey?: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    payload?: any[]
+    payload?: Array<{
+      value?: string;
+      dataKey?: string;
+      color?: string;
+    }>
     verticalAlign?: "top" | "bottom"
   }) {
   const { config } = useChart()

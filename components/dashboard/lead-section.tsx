@@ -50,20 +50,24 @@ export function LeadSection({ leads }: LeadSectionProps) {
   // Отсортированные данные
   const sortedLeads = useMemo(() => {
     return [...leads].sort((a, b) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let aValue: any = a[sortField];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let bValue: any = b[sortField];
+      let aValue: string | Date | null | undefined;
+      let bValue: string | Date | null | undefined;
       
       if (sortField === 'course_name') {
         aValue = a.course_name || '';
         bValue = b.course_name || '';
-      }
-      
-      if (sortField === 'created_at') {
+      } else if (sortField === 'created_at') {
         aValue = new Date(a.created_at);
         bValue = new Date(b.created_at);
+      } else {
+        aValue = a[sortField];
+        bValue = b[sortField];
       }
+      
+      // Обработка null и undefined
+      if (aValue == null && bValue == null) return 0;
+      if (aValue == null) return sortDirection === 'asc' ? -1 : 1;
+      if (bValue == null) return sortDirection === 'asc' ? 1 : -1;
       
       if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
@@ -100,7 +104,7 @@ export function LeadSection({ leads }: LeadSectionProps) {
         lead.name,
         lead.email || '',
         lead.phone || '',
-        lead.course_name || 'Не определился',
+        lead.course_name || 'Нуждается в консультации',
         lead.ip || '',
         new Date(lead.created_at).toLocaleString("ru-RU")
       ])
@@ -137,7 +141,7 @@ export function LeadSection({ leads }: LeadSectionProps) {
   );
 
   const CourseCell = ({ courseName }: { courseName: string | null | undefined }) => {
-    const displayText = courseName || "Не определился";
+    const displayText = courseName || "Нуждается в консультации";
     const isLong = displayText.length > 40;
     const truncatedText = isLong ? `${displayText.substring(0, 40)}...` : displayText;
 
