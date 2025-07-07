@@ -121,6 +121,6 @@ export const CONENT_RESOURCES = {
     subtitle: "Оставьте заявку и мы свяжемся с вами",
     section_id: "lets-start",
     navTitle: "Начать обучение",
-    isNavigated: true,
+    isNavigated: false,
   },
 };

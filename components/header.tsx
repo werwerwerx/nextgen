@@ -51,9 +51,9 @@ export function Header() {
                   isNavigated: boolean;
                 }) =>
                   link.isNavigated ? (
-                    <DropdownMenuItem key={link.section_id} asChild>
+                    <DropdownMenuItem key={`${link.section_id}`} asChild>
                       <Link
-                        href={`#${link.section_id}`}
+                        href={`/#${link.section_id}`}
                         className="block px-7 py-5 border-b text-sm hover:text-primary font-semibold transition-colors cursor-pointer"
                       >
                         {link.navTitle}
@@ -61,14 +61,14 @@ export function Header() {
                     </DropdownMenuItem>
                   ) : null
               )}
-              <DropdownMenuItem  asChild>
-                      <Link
-                        href={`/courses`}
-                        className="block px-7 py-5 border-b text-sm hover:text-primary font-semibold transition-colors cursor-pointer"
-                      >
-                        Курсы
-                      </Link>
-                    </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/courses`}
+                  className="block px-7 py-5 border-b text-sm hover:text-primary font-semibold transition-colors cursor-pointer"
+                >
+                  Курсы
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -84,7 +84,7 @@ export function Header() {
                 link.isNavigated ? (
                   <Link
                     key={link.section_id}
-                    href={`#${link.section_id}`}
+                    href={`/#${link.section_id}`}
                     className="text-md hover:text-primary font-semibold transition-colors"
                   >
                     {link.navTitle}
