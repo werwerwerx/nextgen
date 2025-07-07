@@ -2,10 +2,10 @@ import { SubHeading, BodyText, SmallText } from "@/components/ui/typography";
 import { SPACING } from "@/components/main-page-ui/constants";
 import { LinkButton } from "@/components/ui/link-button";
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
-import { DbCourse } from "@/lib/types";
 import { CONENT_RESOURCES } from "@/components/main-page-ui/content-resources";
+import { CourseUnion } from "@/features/cource/course.types";
 
-export const Footer = ({ courses }: { courses: DbCourse[] }) => {
+export const Footer = ({ courses }: { courses: CourseUnion[] }) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -20,11 +20,6 @@ export const Footer = ({ courses }: { courses: DbCourse[] }) => {
               Обучение AI от практиков: задачи, стажировки, поддержка. 
               Создавайте ИИ‑решения с нуля.
             </BodyText>
-            <div className="flex flex-col gap-2">
-              <ContactItem icon={<Mail className="w-4 h-4" />} text="info@neural-university.ru" />
-              <ContactItem icon={<Phone className="w-4 h-4" />} text="+7 (999) 123-45-67" />
-              <ContactItem icon={<MapPin className="w-4 h-4" />} text="Москва, Россия" />
-            </div>
           </div>
 
           {/* Courses Section */}
@@ -36,7 +31,7 @@ export const Footer = ({ courses }: { courses: DbCourse[] }) => {
                 <FooterLink 
                   key={course.id}
                   href={`/courses/${course.id}`} 
-                  text={course.course_name} 
+                  text={course.title} 
                 />
               ))}
               <FooterLink href="/internships" text="Стажировки" />
@@ -87,11 +82,6 @@ export const Footer = ({ courses }: { courses: DbCourse[] }) => {
           <SmallText className="text-muted-foreground">
             © {currentYear} Neural University. Все права защищены.
           </SmallText>
-          <div className="flex gap-6">
-            <SocialLink href="https://t.me/neural_university" text="Telegram" />
-            <SocialLink href="https://vk.com/neural_university" text="VK" />
-            <SocialLink href="https://youtube.com/neural_university" text="YouTube" />
-          </div>
         </div>
       </div>
     </footer>

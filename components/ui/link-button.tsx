@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
 interface LinkButtonProps {
-  href: string;
+  href?: string;
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
@@ -13,7 +13,7 @@ interface LinkButtonProps {
 }
 
 export const LinkButton = ({
-  href,
+  href = "/courses",
   children,
   className,
   icon = (

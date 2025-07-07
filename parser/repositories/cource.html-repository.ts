@@ -17,6 +17,10 @@ export class CourseHtmlRepository {
     if (!description) {
       description = $(NEW_COURSE_DESCRIPTION_FALLBACK_QUERY).first().text()?.trim() || null;
     }
+
+    if(!description) {
+      description = $(`[field="tn_text_1688847575603"]`).first().text()?.trim() || null;
+    }
     if (!description) {
       description = $(NEW_COURSE_DESCRIPTION_QUERY_DEFAULT).first().attr('content')?.trim() || null;
     }

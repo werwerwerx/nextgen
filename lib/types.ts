@@ -9,5 +9,3 @@ export type TRequest<T> = {
   error: Error;
   data: null;
 }
-
-export type DbCourse = Database['public']['Tables']['cources']['Row'];

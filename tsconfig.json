@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/ui/blur-text.js", "cron/apis.js", "parser/index.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/ui/blur-text.js", "cron/apis.js", "parser/index.js", "components/cource.ui.base.tsx"],
   "exclude": ["node_modules", "parser/*"]
 }

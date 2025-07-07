@@ -20,7 +20,7 @@ export type Database = {
           origin_url: string
           price_starts_from: string | null
           tariff_price: Json | null
-          type: Json
+          type: string
           updated_at: string
         }
         Insert: {
@@ -33,7 +33,7 @@ export type Database = {
           origin_url: string
           price_starts_from?: string | null
           tariff_price?: Json | null
-          type: Json
+          type: string
           updated_at?: string
         }
         Update: {
@@ -46,7 +46,7 @@ export type Database = {
           origin_url?: string
           price_starts_from?: string | null
           tariff_price?: Json | null
-          type?: Json
+          type?: string
           updated_at?: string
         }
         Relationships: []

@@ -41,12 +41,15 @@ export async function start(): Promise<ParseReport> {
       courceInstallmentPlanHTMLRepository
     );
     const parseStartTime = Date.now();
-    const courses = await courceService.visitLinks();
+    const { courses, errors } = await courceService.visitLinks();
     report.performance.totalParseTime = Date.now() - parseStartTime;
     report.stats.totalLinksParsed = courses.length;
     report.performance.averageParseTime = courses.length
       ? report.performance.totalParseTime / courses.length
       : 0;
+
+    // Add parsing errors to report
+    report.errors.parsing.push(...errors);
 
     if (courses.length === 0) {
       console.error("No courses found to save");

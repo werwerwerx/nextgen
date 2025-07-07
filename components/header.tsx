@@ -1,3 +1,4 @@
+"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,12 +8,19 @@ import {
 import { CONENT_RESOURCES } from "./main-page-ui/content-resources";
 import { Button } from "./ui/button";
 import { MenuIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 export function Header() {
+  const router = useRouter();
   return (
     <header className="fixed top-0 left-0 min-w-screen w-full z-50 bg-background/80 backdrop-blur-md border-b border-border h-20">
       <div className="container mx-auto max-w-6xl h-full flex items-center w-full justify-between px-5">
         {/* Logo & Brand */}
-        <div className="flex items-center gap-3">
+        <div 
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+          onClick={() => router.push('/')}
+        >
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-lg">N</span>
           </div>
@@ -44,15 +52,23 @@ export function Header() {
                 }) =>
                   link.isNavigated ? (
                     <DropdownMenuItem key={link.section_id} asChild>
-                      <a
+                      <Link
                         href={`#${link.section_id}`}
                         className="block px-7 py-5 border-b text-sm hover:text-primary font-semibold transition-colors cursor-pointer"
                       >
                         {link.navTitle}
-                      </a>
+                      </Link>
                     </DropdownMenuItem>
                   ) : null
               )}
+              <DropdownMenuItem  asChild>
+                      <Link
+                        href={`/courses`}
+                        className="block px-7 py-5 border-b text-sm hover:text-primary font-semibold transition-colors cursor-pointer"
+                      >
+                        Курсы
+                      </Link>
+                    </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -66,15 +82,21 @@ export function Header() {
                 isNavigated: boolean;
               }) =>
                 link.isNavigated ? (
-                  <a
+                  <Link
                     key={link.section_id}
                     href={`#${link.section_id}`}
                     className="text-md hover:text-primary font-semibold transition-colors"
                   >
                     {link.navTitle}
-                  </a>
+                  </Link>
                 ) : null
             )}
+            <Link
+              href={`/courses`}
+              className="text-md hover:text-primary font-semibold transition-colors"
+            >
+              Курсы
+            </Link>  
           </nav>
         </div>
       </div>

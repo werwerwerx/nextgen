@@ -24,7 +24,7 @@ export const GradientLargeHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     className={cn(
-      "text-5xl md:text-5xl lg:text-7xl font-bold text-foreground drop-shadow-sm",
+      "text-5xl md:text-5xl lg:text-7xl font-bold text-foreground drop-shadow-sm py-2",
       withGradientCn,
       className
     )}

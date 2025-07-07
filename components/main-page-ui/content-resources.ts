@@ -117,8 +117,8 @@ export const CONENT_RESOURCES = {
     subtitle: "Получите доступ к курсам Neural University",
   },
   lets_start: {
-    title: "Начнем наше знакомство?",
-    subtitle: "Получите доступ к курсам Neural University",
+    title: "Остались вопросы?",
+    subtitle: "Оставьте заявку и мы свяжемся с вами",
     section_id: "lets-start",
     navTitle: "Начать обучение",
     isNavigated: true,

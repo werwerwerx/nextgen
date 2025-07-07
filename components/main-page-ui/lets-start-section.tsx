@@ -1,48 +1,40 @@
 "use client";
-import { RequestForm } from "@/features/lead/lead-request/lead-request-form.component.ux";
-import { Subtitle } from "../ui/typography";
+import { LeadRequestForm } from "@/features/lead/lead-request/lead-request";
+import { SectionHeading, Subtitle } from "../ui/typography";
 import { SPACING } from "./constants";
 import { CONENT_RESOURCES } from "./content-resources";
-import BlurText from "@/components/ui/blur-text";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
-function LetsStartTextContent() {
-  return (
-    <div className={`${SPACING.gapHead} flex z-10 flex-col`}>
-      <BlurText
-        text={CONENT_RESOURCES.lets_start.title}
-        delay={150}
-        animateBy="words"
-        direction="top"
-        className="text-xl sm:text-3xl md:text-5xl lg:text-7xl font-semibold !text-center py-2"
-        animationFrom={{ filter: "blur(10px)", opacity: 0, y: -50 }}
-        animationTo={[
-          { filter: "blur(5px)", opacity: 0.5, y: 5 },
-          { filter: "blur(0px)", opacity: 1, y: 0 },
-        ]}
-        onAnimationComplete={() => {}}
-      />
-      <Subtitle className="text-center text-primary-foreground/70">
-        {CONENT_RESOURCES.lets_start.subtitle}
-      </Subtitle>
-    </div>
-  );
-}
-
-export const LetsStartSection = ({
-  mayInterstedIn,
-}: {
-  mayInterstedIn: { title: string; origin_url: string }[];
-}) => {
+export const LetsStartSection = ({}: {}) => {
+  const router = useRouter();
+  
   return (
     <section
       className={`w-full flex py-10 md:py-20 text-primary-foreground rounded-lg flex-col items-center justify-center ${SPACING.gapSemantic} bg-transparent md:px-20 bg-gradient-to-r from-primary to-purple-500`}
       id={CONENT_RESOURCES.lets_start.section_id}
     >
-      <LetsStartTextContent />
-      <div className="px-2">
-        <RequestForm
-          mayInterestInList={mayInterstedIn.map((item) => item.title)}
-        />
+          <div className={`${SPACING.gapHead} flex z-10 flex-col`}>
+          <SectionHeading className="text-primary-foreground">
+            {CONENT_RESOURCES.lets_start.title}
+          </SectionHeading>
+      <Subtitle className="text-center text-primary-foreground/70">
+        {CONENT_RESOURCES.lets_start.subtitle}
+      </Subtitle>
+  </div>
+      <LeadRequestForm />
+      
+      <div className="flex flex-col items-center gap-4">
+        <div className="text-primary-foreground/70 font-medium">
+          или
+        </div>
+        <Button 
+          variant="secondary" 
+          onClick={() => router.push('/courses')}
+          className="bg-background/10 !p-6 text-md font-semibold border-primary-foreground/30 text-primary-foreground hover:bg-background/20"
+        >
+          Выберите подходящий курс
+        </Button>
       </div>
     </section>
   );
