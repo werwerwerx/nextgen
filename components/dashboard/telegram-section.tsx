@@ -199,6 +199,16 @@ export function TelegramSection() {
 
   useEffect(() => {
     fetchTelegramUpdates();
+
+    // Обновляем данные каждые 30 секунд
+    const interval = setInterval(fetchTelegramUpdates, 30000);
+
+    return () => clearInterval(interval);
+  }, []); // Запускаем только при монтировании компонента
+
+  // Добавляем функцию для ручного обновления
+  const handleRefresh = useCallback(() => {
+    fetchTelegramUpdates();
   }, []);
 
   const isObserver = useCallback((telegramId: string) => {
@@ -320,7 +330,7 @@ export function TelegramSection() {
           <Button
             variant="outline"
             size="sm"
-            onClick={fetchTelegramUpdates}
+            onClick={handleRefresh}
             disabled={loading}
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />

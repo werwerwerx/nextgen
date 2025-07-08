@@ -72,6 +72,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       }, { status: 400 });
     }
 
+    // Если есть обновления, автоматически подтверждаем их получение
+    if (data.result.length > 0) {
+      const lastUpdateId = data.result[data.result.length - 1].update_id;
+      const confirmUrl = `https://api.telegram.org/bot${token}/getUpdates?offset=${lastUpdateId + 1}`;
+      
+      await fetch(confirmUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
     // Форматируем данные для удобного отображения
     const formattedUpdates = data.result.map(update => ({
       update_id: update.update_id,

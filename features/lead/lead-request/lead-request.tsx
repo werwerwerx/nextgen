@@ -78,7 +78,7 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
             currency: 'RUB',
           });
         } else {
-          setServerError(data.clientErrorMessage);
+          setServerError(data.message);
         }
       } catch (error) {
         setServerError("Произошла ошибка при отправке заявки. Попробуйте еще раз.");

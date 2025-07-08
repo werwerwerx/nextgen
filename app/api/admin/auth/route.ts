@@ -33,7 +33,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AdminAuth
     const getRedirectUrl = () => {
       return process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3000'
-        : process.env.SITE_URL;
+        : process.env.NEXT_PUBLIC_SITE_URL;
     };
     
     const siteUrl = getRedirectUrl();

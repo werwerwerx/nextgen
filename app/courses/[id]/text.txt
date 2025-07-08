@@ -2,9 +2,6 @@
 
 Я завершил разработку проекта NextGen. Сайт полностью готов к использованию и требует только финальных настроек с вашей стороны.
 
-Можно увидеть на:
-
-
 Что было реализовано:
 
 1. Разработка основного функционала:
@@ -54,6 +51,10 @@
    После добавления DNS-записи Vercel автоматически проверит и подтвердит настройку домена. Процесс может занять до 24 часов, но обычно завершается в течение нескольких минут. Проверить можно на https://vercel.com/nextgen-9c28d5d1/nextgen/settings/domains - с домена должно уйти сообщение о не корректной настройке
 
 2. Настроить API ключи:
+   - Настройка Supabase:
+      1. Зайдите в Supabase Dashboard( https://supabase.com/dashboard/project/dfmeqrofzpfmickppnmd/auth/url-configuration ) → Authentication → URL Configuration
+      2. В поле "Site URL" укажите: https://nextgen.appletownworld.com/admin/callback
+     
    - Google Analytics 4: 
      Получите Measurement ID и обновите переменную NEXT_PUBLIC_GA4_ID в настройках проекта:
      https://vercel.com/nextgen-9c28d5d1/nextgen/settings/environment-variables
@@ -70,3 +71,5 @@
 - Сайт будет полностью готов к работе на финальном домене
 
 Ваш проект доступен по адресу: https://vercel.com/nextgen-9c28d5d1/nextgen
+admin: https://nextgen-5up02hw7k-nextgen-9c28d5d1.vercel.app/admin
+В админке нужно пройти разовую регистрацию по почте.

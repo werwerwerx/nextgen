@@ -37,15 +37,27 @@ export const submitLeadData = async (
     },
     body: JSON.stringify(leadData),
   });
-  return res.json() as Promise<LeadResponse>;
+
+  const data = await res.json();
+  
+  if (!res.ok) {
+    return {
+      success: false,
+      error: data.error || "Unknown error",
+      message: data.message || "Произошла ошибка при отправке заявки"
+    };
+  }
+
+  return data as LeadResponse;
 };
 
 export type LeadResponse = {
   success: false;
-  errorMessage: string;
-  clientErrorMessage: string;
+  error: string;
+  message: string;
 } | {
   success: true;
   data: SavedLead;
+  message: string;
 };
 

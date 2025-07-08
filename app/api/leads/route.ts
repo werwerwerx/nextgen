@@ -244,9 +244,11 @@ export async function POST(
       }
     }
 
-    notifyObservers(leadSaved, courseName).catch(error => {
+    try {
+      await notifyObservers(leadSaved, courseName);
+    } catch (error) {
       console.error('Ошибка отправки уведомлений:', error);
-    });
+    }
 
     return new NextResponse(
       JSON.stringify({
