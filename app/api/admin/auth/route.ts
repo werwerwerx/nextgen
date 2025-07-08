@@ -36,15 +36,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<AdminAuth
         return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
       }
       
-      // Для Vercel Preview environments
-      if (process.env.VERCEL_URL) {
-        return `https://${process.env.VERCEL_URL}`;
-      }
-      
       // Для локальной разработки
       return process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3000'
-        : '';
+        : process.env.NEXT_PUBLIC_SITE_URL || '';
     };
     
     const siteUrl = getRedirectUrl();
