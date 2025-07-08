@@ -7,6 +7,8 @@ import { Database } from "@/lib/supabase/database.types";
 
 type SavedLead = Database["public"]["Tables"]["leads"]["Row"];
 
+type Observer = Database["public"]["Tables"]["notifications_ovserver_contacts"]["Row"];
+
 // Функция для отправки Telegram уведомления
 async function sendTelegramNotification(chatId: string, message: string): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -36,13 +38,17 @@ async function sendTelegramNotification(chatId: string, message: string): Promis
 async function notifyObservers(leadData: SavedLead, courseName?: string): Promise<void> {
   const supabase = await createClient();
   
+  console.log('Получаем список наблюдателей...');
   const { data: observers, error: observersError } = await supabase
     .from('notifications_ovserver_contacts')
-    .select('observer_telegram_id, obvserver_email');
+    .select('*') as { data: Observer[] | null; error: any };
 
   if (observersError) {
+    console.error('Ошибка при получении списка наблюдателей:', observersError);
     throw new Error(`Ошибка при получении списка наблюдателей: ${observersError.message}`);
   }
+
+  console.log('Получены наблюдатели:', observers);
 
   if (!observers || observers.length === 0) {
     console.log('Не найдено наблюдателей для уведомления');
@@ -62,8 +68,11 @@ async function notifyObservers(leadData: SavedLead, courseName?: string): Promis
   const notifications: Promise<void>[] = [];
 
   const telegramObservers = observers.filter(obs => obs.observer_telegram_id);
+  console.log('Telegram наблюдатели:', telegramObservers);
+  
   telegramObservers.forEach(observer => {
     if (observer.observer_telegram_id) {
+      console.log('Отправляем уведомление в Telegram для:', observer.observer_telegram_id);
       notifications.push(
         sendTelegramNotification(observer.observer_telegram_id, telegramMessage)
           .catch(error => {
@@ -74,11 +83,16 @@ async function notifyObservers(leadData: SavedLead, courseName?: string): Promis
   });
 
   const emailObservers = observers.filter(obs => obs.obvserver_email);
+  console.log('Email наблюдатели:', emailObservers);
+  
   emailObservers.forEach(observer => {
     if (observer.obvserver_email) {
+      console.log('Отправляем уведомление на email:', observer.obvserver_email);
       notifications.push(
         sendNewLeadEmailNotification(observer.obvserver_email, leadData, courseName)
-          .then(() => {})
+          .then(() => {
+            console.log('Email уведомление успешно отправлено:', observer.obvserver_email);
+          })
           .catch(error => {
             console.error(`Ошибка отправки Email уведомления для ${observer.obvserver_email}:`, error);
           })
