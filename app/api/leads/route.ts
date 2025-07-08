@@ -4,11 +4,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { LeadResponse, TLeadData, validateLead } from "./shared";
 import { sendNewLeadEmailNotification } from "@/lib/email";
 import { Database } from "@/lib/supabase/database.types";
-import { PostgrestError } from "@supabase/supabase-js";
 
 type SavedLead = Database["public"]["Tables"]["leads"]["Row"];
 
-type Observer = Database["public"]["Tables"]["notifications_ovserver_contacts"]["Row"];
 
 // Функция для отправки Telegram уведомления
 async function sendTelegramNotification(chatId: string, message: string): Promise<void> {
