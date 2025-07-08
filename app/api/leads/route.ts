@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { LeadResponse, TLeadData, validateLead } from "./shared";
 import { sendNewLeadEmailNotification } from "@/lib/email";
 import { Database } from "@/lib/supabase/database.types";
+import { PostgrestError } from "@supabase/supabase-js";
 
 type SavedLead = Database["public"]["Tables"]["leads"]["Row"];
 
@@ -41,7 +42,7 @@ async function notifyObservers(leadData: SavedLead, courseName?: string): Promis
   console.log('Получаем список наблюдателей...');
   const { data: observers, error: observersError } = await supabase
     .from('notifications_ovserver_contacts')
-    .select('*') as { data: Observer[] | null; error: any };
+    .select('*');
 
   if (observersError) {
     console.error('Ошибка при получении списка наблюдателей:', observersError);
