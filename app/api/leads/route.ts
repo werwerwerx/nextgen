@@ -97,6 +97,22 @@ export async function POST(
     const leadData = (await request.json()) as TLeadData;
     console.log('Получены данные лида:', leadData);
     
+    // Проверка honeypot
+    if (leadData.company && leadData.company.length > 0) {
+      console.log('Обнаружен спам бот (honeypot)');
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          error: "SPAM_DETECTED",
+          message: "Spam detected"
+        }),
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+    
     const errors = validateLead(leadData);
     if (errors) {
       console.log('Ошибки валидации:', errors);

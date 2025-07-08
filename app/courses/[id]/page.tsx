@@ -3,9 +3,47 @@ import { PageContainer } from "@/components/continer";
 import { GradientSectionHeading, Subtitle } from "@/components/ui/typography";
 import { getCourseById } from "@/features/cource/cource.api";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 interface CoursePageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
+  const { id } = await params;
+  const courseId = parseInt(id, 10);
+  const course = await getCourseById(courseId);
+
+  if (!course) {
+    return {
+      title: "Курс не найден",
+      description: "Запрашиваемый курс не существует или был удален",
+    };
+  }
+
+  return {
+    title: course.title,
+    description: course.description || "Узнайте больше о курсе и начните обучение прямо сейчас",
+    openGraph: {
+      title: course.title,
+      description: course.description || "Узнайте больше о курсе и начните обучение прямо сейчас",
+      type: "article",
+      images: [
+        {
+          url: "/opengraph-image.png",
+          width: 1200,
+          height: 630,
+          alt: course.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: course.title,
+      description: course.description || "Узнайте больше о курсе и начните обучение прямо сейчас",
+      images: ["/opengraph-image.png"],
+    },
+  };
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {

@@ -6,6 +6,7 @@ export type TLeadData = {
   phone: string;
   email: string;
   courseInterestedInId: number | null;
+  company?: string; // honeypot field
 };
 
 type SavedLead = Database["public"]["Tables"]["leads"]["Row"];
@@ -15,6 +16,7 @@ const leadSchema = z.object({
   phone: z.string().min(10, "Некорректный номер телефона").max(15, "Некорректный номер телефона"),
   name: z.string().min(1, "Имя не может быть пустым"),
   courseInterestedInId: z.number().nullable().optional(),
+  company: z.string().max(0, "Spam detected").optional(), // honeypot validation
 });
 
 export const validateLead = (leadData: TLeadData) => {

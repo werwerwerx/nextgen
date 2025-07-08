@@ -277,7 +277,7 @@ function AdminPageContent() {
 
 export default function AdminPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <AdminPageContent />
     </Suspense>
   );

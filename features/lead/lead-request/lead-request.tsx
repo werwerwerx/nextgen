@@ -5,6 +5,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Loader2, Send, CheckCircle } from "lucide-react";
+import { trackPixelEvent } from "@/components/FacebookPixel";
+
+// Функция для отправки событий в GA4
+const trackGAEvent = (eventName: string, params = {}) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[GA4]: would track "${eventName}"`, params);
+    return;
+  }
+  // @ts-ignore - gtag может быть не определен в типах
+  window.gtag?.('event', eventName, params);
+};
 
 interface LeadRequestFormProps {
   className?: string;
@@ -17,6 +28,7 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
     phone: "",
     email: "",
     courseInterestedInId: courseId,
+    company: "", // honeypot field
   };
 
   const [leadData, setLeadData] = useState<TLeadData>(initialLeadData);
@@ -31,8 +43,6 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
     setErrors(validationErrors ?? null);
     return !validationErrors;
   };
-
-
 
   const handleFieldChange = (field: keyof TLeadData, value: string) => {
     const newLeadData = { ...leadData, [field]: value };
@@ -55,6 +65,18 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
         const data = await submitLeadData(leadData);
         if (data.success) {
           setIsSuccess(true);
+          // Отправляем событие в GA4
+          trackGAEvent('generate_lead', {
+            currency: 'RUB',
+            value: 1,
+            course_id: courseId,
+          });
+          // Отправляем событие в FB Pixel
+          await trackPixelEvent('Lead', {
+            content_name: courseId ? `Course_${courseId}` : 'General_Inquiry',
+            value: 1,
+            currency: 'RUB',
+          });
         } else {
           setServerError(data.clientErrorMessage);
         }
@@ -71,6 +93,21 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
         onSubmit={handleSubmit}
         className="flex flex-col bg-card/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-border/80 space-y-6"
       >
+        {/* Honeypot field - скрытое поле для защиты от спама */}
+        <div className="!absolute !-left-[9999px] !-top-[9999px] !h-0 !w-0 !overflow-hidden" aria-hidden="true">
+          <label>
+            Не заполняйте это поле
+            <Input
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              value={leadData.company}
+              onChange={(e) => handleFieldChange("company", e.target.value)}
+            />
+          </label>
+        </div>
+
         <div className="space-y-5">
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
@@ -81,7 +118,7 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
               placeholder="Введите ваше имя"
               value={leadData.name}
               onChange={(e) => handleFieldChange("name", e.target.value)}
-              className="w-full h-12 px-4 text-base focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl border-border"
+              className="w-full h-12 px-4 text-base text-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl border-border placeholder:text-muted-foreground"
               disabled={isSubmitting || isSuccess}
             />
             {isShowErrors && errors?.name && (
@@ -100,7 +137,7 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
               placeholder="89999999999"
               value={leadData.phone}
               onChange={(e) => handleFieldChange("phone", e.target.value)}
-              className="w-full h-12 px-4 text-base focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl border-border"
+              className="w-full h-12 px-4 text-base text-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl border-border placeholder:text-muted-foreground"
               disabled={isSubmitting || isSuccess}
             />
             {isShowErrors && errors?.phone && (
@@ -119,7 +156,7 @@ export const LeadRequestForm = ({ className, courseId = null }: LeadRequestFormP
               placeholder="example@example.com"
               value={leadData.email}
               onChange={(e) => handleFieldChange("email", e.target.value)}
-              className="w-full h-12 px-4 text-base focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl border-border"
+              className="w-full h-12 px-4 text-base text-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl border-border placeholder:text-muted-foreground"
               disabled={isSubmitting || isSuccess}
             />
             {isShowErrors && errors?.email && (
