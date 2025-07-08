@@ -31,15 +31,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<AdminAuth
     
     // Получаем URL автоматически из Vercel
     const getRedirectUrl = () => {
-      // В продакшене используем NEXT_PUBLIC_SITE_URL
-      if (process.env.NEXT_PUBLIC_SITE_URL) {
-        return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
-      }
-      
-      // Для локальной разработки
       return process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3000'
-        : process.env.NEXT_PUBLIC_SITE_URL || '';
+        : process.env.SITE_URL;
     };
     
     const siteUrl = getRedirectUrl();
