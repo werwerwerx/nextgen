@@ -39,7 +39,7 @@ export default async function Home() {
   return (
     <>
       <PageContainer>
-        <div className="h-[66vh] w-full">
+        <div className="  md:h-[66vh] w-full">
           <HeroSection />
         </div>
 
