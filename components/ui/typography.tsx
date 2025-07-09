@@ -8,7 +8,7 @@ export const MainHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     className={cn(
-      "text-4xl md:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm",
+      "text-4xl md:text-4xl lg:text-5xl font-bold text-foreground drop-shadow-sm pb-5 md:pb-8",
       className
     )}
     {...props}
@@ -24,7 +24,7 @@ export const GradientLargeHeading = ({
 }: TypographyProps & React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     className={cn(
-      "text-5xl md:text-5xl lg:text-7xl font-bold text-foreground drop-shadow-sm py-2",
+      "text-5xl md:text-5xl lg:text-7xl font-bold text-foreground drop-shadow-sm py-2 pb-5 md:pb-8",
       withGradientCn,
       className
     )}
@@ -131,8 +131,19 @@ interface GradientSectionHeadingProps {
   className?: string;
 }
 
-const withShadowPrimaryStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--primary) / 0.3))"}
-const withShadowForegroundStyle = {filter: "drop-shadow(0 19px 10px hsl(var(--foreground) / 0.3))"}
+const withShadowPrimaryStyle = {
+  filter: "drop-shadow(0 10px 8px hsl(var(--primary) / 0.3))",
+  "@media (min-width: 768px)": {
+    filter: "drop-shadow(0 19px 10px hsl(var(--primary) / 0.3))"
+  }
+}
+
+const withShadowForegroundStyle = {
+  filter: "drop-shadow(0 10px 8px hsl(var(--foreground) / 0.3))",
+  "@media (min-width: 768px)": {
+    filter: "drop-shadow(0 19px 10px hsl(var(--foreground) / 0.3))"
+  }
+}
 
 
 const withGradientCn = "bg-gradient-to-r from-primary via-primary-500 to-purple-500 bg-clip-text text-transparent "
