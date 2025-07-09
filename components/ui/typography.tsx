@@ -140,7 +140,7 @@ const withShadowPrimaryStyle = {
 
 const withShadowForegroundStyle = {
   filter: "drop-shadow(0 10px 8px hsl(var(--foreground) / 0.3))",
-  "@media (min-width: 768px)": {
+  "@media (minWidth: 768px)": {
     filter: "drop-shadow(0 19px 10px hsl(var(--foreground) / 0.3))"
   }
 }
