@@ -15,17 +15,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<AdminLogi
     
     const adminSupabase = createAdminClient();
     
-    // Проверяем, что пользователь существует и является админом
     const { data: existingUsers } = await adminSupabase.auth.admin.listUsers();
     const adminUser = existingUsers.users.find(user => 
-      user.email === email && user.user_metadata?.is_admin
+      user.email === email && user.user_metadata?.is_admin && user.email_confirmed_at
     );
     
     if (!adminUser) {
       return NextResponse.json(
         { 
           success: false, 
-          message: "Пользователь не найден или не является администратором" 
+          message: "Администратор не найден или email не подтвержден" 
         },
         { status: 401 }
       );

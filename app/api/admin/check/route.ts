@@ -6,7 +6,6 @@ export async function GET(): Promise<NextResponse<AdminCheckResponse>> {
   try {
     const supabase = createAdminClient();
     
-    // Проверяем, есть ли уже зарегистрированный админ
     const { data: existingUsers } = await supabase.auth.admin.listUsers();
     
     const hasAdmin = existingUsers.users.some(user => 

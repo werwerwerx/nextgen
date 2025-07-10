@@ -12,11 +12,6 @@ export default function AdminCallbackPage() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Как работает Supabase Magic Link:
-        // 1. Пользователь получает письмо с токеном
-        // 2. Переходит по ссылке, которая ведет сюда (/admin/callback)
-        // 3. Supabase автоматически обменивает токен из URL на сессию
-        // 4. getSession() возвращает активную сессию, если токен валидный
         
         const { data, error } = await supabase.auth.getSession();
         
@@ -26,16 +21,12 @@ export default function AdminCallbackPage() {
           return;
         }
 
-        // Проверяем, что сессия создана и пользователь является администратором
         if (data.session?.user?.user_metadata?.is_admin) {
-          // Успешная аутентификация - редиректим в панель
           router.push("/admin/dashboard");
         } else if (data.session?.user) {
-          // Пользователь аутентифицирован, но не админ
-          await supabase.auth.signOut(); // Выходим из неадминской сессии
+          await supabase.auth.signOut();
           router.push("/admin?error=not_admin");
         } else {
-          // Сессия не создана (невалидный токен или истекший)
           router.push("/admin?error=auth_failed");
         }
       } catch (error) {
