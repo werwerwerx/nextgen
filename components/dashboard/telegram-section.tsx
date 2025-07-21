@@ -46,7 +46,7 @@ interface TelegramMessage {
 
 interface Observer {
   id: number;
-  observer_telegram_id: string;
+  observer_telegram_id: string | null;
   obvserver_email: string | null;
   created_at: string;
 }
@@ -67,7 +67,6 @@ export function TelegramSection() {
   const [notificationFilter, setNotificationFilter] = useState<NotificationFilter>('all');
   const [dateFilter, setDateFilter] = useState<DateFilter>('all');
 
-  // Состояние для добавления email наблюдателя
   const [newEmail, setNewEmail] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
 
@@ -200,13 +199,11 @@ export function TelegramSection() {
   useEffect(() => {
     fetchTelegramUpdates();
 
-    // Обновляем данные каждые 30 секунд
     const interval = setInterval(fetchTelegramUpdates, 30000);
 
     return () => clearInterval(interval);
-  }, []); // Запускаем только при монтировании компонента
+  }, []);
 
-  // Добавляем функцию для ручного обновления
   const handleRefresh = useCallback(() => {
     fetchTelegramUpdates();
   }, []);
@@ -224,34 +221,53 @@ export function TelegramSection() {
     return fullName || username || `Пользователь ${message.user_id}`;
   };
 
-  // Объединяем данные из Telegram сообщений и email наблюдателей
-  const allObservers = useMemo(() => {
-    const telegramUsers = messages.map(msg => ({
-      id: `telegram_${msg.user_id}`,
+  // Объединяем данные из observers (telegram и email) и заявки (messages, которые не в observers)
+  const telegramObservers = observers
+    .filter(obs => obs.observer_telegram_id)
+    .map(obs => {
+      const msg = messages.find(m => m.user_id?.toString() === obs.observer_telegram_id);
+      return {
+        id: `telegram_${obs.id}`,
+        type: 'telegram' as const,
+        telegram_id: obs.observer_telegram_id!,
+        email: null,
+        name: msg ? getUserDisplayName(msg) : `ID: ${obs.observer_telegram_id}`,
+        username: msg?.username || null,
+        date: obs.created_at,
+        hasNotifications: true
+      };
+    });
+
+  const emailObservers = observers
+    .filter(obs => obs.obvserver_email)
+    .map(obs => ({
+      id: `email_${obs.id}`,
+      type: 'email' as const,
+      telegram_id: '',
+      email: obs.obvserver_email!,
+      name: obs.obvserver_email!,
+      username: null,
+      date: obs.created_at,
+      hasNotifications: true
+    }));
+
+  // Остальные messages, которые не являются observer'ами (заявки)
+  const telegramApplicants = messages
+    .filter(msg => !observers.some(obs => obs.observer_telegram_id === msg.user_id?.toString()))
+    .map(msg => ({
+      id: `telegram_applicant_${msg.user_id}`,
       type: 'telegram' as const,
       telegram_id: msg.user_id?.toString() || '',
       email: null,
       name: getUserDisplayName(msg),
       username: msg.username,
       date: msg.date,
-      hasNotifications: msg.user_id ? isObserver(msg.user_id.toString()) : false
+      hasNotifications: false
     }));
 
-    const emailUsers = observers
-      .filter(obs => obs.obvserver_email && !obs.observer_telegram_id)
-      .map(obs => ({
-        id: `email_${obs.id}`,
-        type: 'email' as const,
-        telegram_id: '',
-        email: obs.obvserver_email,
-        name: obs.obvserver_email,
-        username: null,
-        date: obs.created_at,
-        hasNotifications: true
-      }));
-
-    return [...telegramUsers, ...emailUsers];
-  }, [messages, observers, isObserver]);
+  const allObservers = useMemo(() => {
+    return [...telegramObservers, ...emailObservers, ...telegramApplicants];
+  }, [observers, messages]);
 
   const filteredObservers = useMemo(() => {
     let filtered = allObservers;
